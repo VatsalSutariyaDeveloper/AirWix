@@ -4,7 +4,10 @@ const dotenv = require('dotenv');
 const bodyParser = require("body-parser");
 const sequelize = require('./config/database');
 const responseFormatter = require("./middlewares/responseFormatter");
-const itemRoutes = require("./routes/masterRoutes");
+const masterRoutes = require("./routes/masterRoutes");
+const masterItemRoutes = require("./routes/masterItemRoutes");
+const crmRoutes = require("./routes/crmRoutes");
+
 
 dotenv.config();
 
@@ -15,8 +18,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(responseFormatter);
 
-// Load item master routes
-app.use("/masters/item", itemRoutes);
+// Load master routes
+app.use("/masters/item", masterItemRoutes);
+app.use("/masters", masterRoutes);
+app.use("/crm/inquiry", crmRoutes);
 
 // Sync DB and start server
 sequelize.sync().then(() => {

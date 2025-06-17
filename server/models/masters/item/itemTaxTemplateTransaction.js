@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const ItemTaxTemplateTransaction = sequelize.define("ItemTaxTemplateTransaction", {
     tax_template_id: { type: DataTypes.INTEGER, allowNull: false },
     tax_percentage: { type: DataTypes.DECIMAL(5, 2), allowNull: false },
-    tax_name: { type: DataTypes.STRING, allowNull: false },
+    tax_name: { type: DataTypes.STRING(100), allowNull: false },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,
