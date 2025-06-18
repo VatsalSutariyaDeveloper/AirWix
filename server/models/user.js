@@ -1,12 +1,16 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../config/database'); // adjust path if needed
 
-const User = sequelize.define('User', {
+const User = sequelize.define('user', {
   ledger_id: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
   user_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  user_code: {
     type: DataTypes.STRING,
     allowNull: false,
   },

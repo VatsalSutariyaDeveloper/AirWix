@@ -1,15 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controllers/userController');
-const uploadImage = require('../helpers/uploadSignature'); // use memoryStorage version
+const { uploadImage } = require('../helpers/uploadImage');
+const controller = require("../controllers/userController");
+
+
 
 // Use memory storage to delay saving the image until after validation
-router.post('/', uploadImage.single('authorized_signature'), userController.create);
-router.get('/', userController.getUsers);
-router.get('/:id', userController.getUser);
+router.post("/", uploadImage().single("authorized_signature"), controller.create);
+
+router.get('/', controller.getUsers);
+router.get('/:id', controller.getUser);
 
 // Optional: Allow image re-upload during update
-router.put('/:id', uploadImage.single('authorized_signature'), userController.updateUser);
-router.delete('/:id', userController.deleteUser);
+router.put('/:id', uploadImage().single('authorized_signature'), controller.updateUser);
+router.delete('/:id', controller.deleteUser);
 
 module.exports = router;

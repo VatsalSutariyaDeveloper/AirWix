@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
-const { User } = require('../models');
-const { validateRequest } = require('../helpers/validateRequest');
+const User = require('../models/user'); // ✅ Make sure path is correct
+const validateRequest = require('../helpers/validateRequest');
 const commonQuery = require('../helpers/commonQuery');
 
 const MODULE = 'User';
 
 const allowedFields = [
-  'ledger_id', 'user_name', 'email', 'user_key', 'user_type', 'authorized_signature',
+  'ledger_id', 'user_name', 'email', 'user_key', 'user_code', 'user_type', 'authorized_signature',
   'common_email', 'phone', 'company_name', 'address', 'city_id', 'state_id', 'country_id',
   'pincode', 'report_to_user_type_id', 'report_to_user_id', 'question_id', 'question_answer',
   'template_access_params_id', 'user_access_permission_ids', 'menu_show_permission_ids',
@@ -38,23 +38,30 @@ exports.create = async (req, res) => {
     return acc;
   }, {});
 
-  // Handle signature upload (after validation)
-  if (req.file) {
-    const ext = path.extname(req.file.originalname);
-    const filename = `signature_${Date.now()}${ext}`;
-    const uploadPath = path.join('public/uploads/signatures', filename);
+  let filename = null;
 
-    try {
-      fs.writeFileSync(uploadPath, req.file.buffer);
-      userData.authorized_signature = `/uploads/signatures/${filename}`;
-    } catch (err) {
-      return res.error("FILE_UPLOAD_ERROR", { error: err.message });
-    }
+  // Step 1: Prepare filename if file exists
+  if (req.file && req.file.originalname) {
+    const ext = path.extname(req.file.originalname).toLowerCase();
+    const name = path.basename(req.file.originalname, ext).replace(/\s+/g, "_");
+    filename = `${Date.now()}_${name}${ext}`;
+    userData.authorized_signature = `/uploads/signatures/${filename}`;
   }
 
   try {
+    // Step 2: Save data to DB
     const result = await commonQuery.createRecord(User, userData);
-    return res.success("CREATE", MODULE, result);
+
+    // Step 3: Now store image file with the DB-saved name
+    if (req.file && req.file.buffer && filename) {
+      const folder = "public/uploads/signatures";
+      if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
+
+      const uploadPath = path.join(folder, filename);
+      fs.writeFileSync(uploadPath, req.file.buffer);
+    }
+
+    return res.success("CREATE", "USER", result);
   } catch (err) {
     return res.error("SERVER_ERROR", { error: err.message });
   }

@@ -7,6 +7,9 @@ const responseFormatter = require("./middlewares/responseFormatter");
 const masterRoutes = require("./routes/masterRoutes");
 const masterItemRoutes = require("./routes/masterItemRoutes");
 const crmRoutes = require("./routes/crmRoutes");
+const user = require("./routes/userRoutes");
+const multer = require('multer');
+const path = require('path');
 
 
 dotenv.config();
@@ -22,6 +25,24 @@ app.use(responseFormatter);
 app.use("/masters/item", masterItemRoutes);
 app.use("/masters", masterRoutes);
 app.use("/crm/inquiry", crmRoutes);
+app.use("/user", user);
+
+// after all routes
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError || err.message.includes("Only")) {
+    return res.status(400).json({
+      status: false,
+      message: err.message,
+    });
+  }
+
+  return res.status(500).json({
+    status: false,
+    message: "Internal Server Error",
+    error: err.message,
+  });
+});
+
 
 // Sync DB and start server
 sequelize.sync().then(() => {
