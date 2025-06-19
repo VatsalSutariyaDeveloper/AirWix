@@ -2,13 +2,15 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const uploadImage = (maxSize = 2 * 1024 * 1024) => {
+const uploadImage = (maxSize = 5 * 1024 * 1024) => { // default: 5MB
   const storage = multer.memoryStorage();
 
   const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png/;
     const mimetypeValid = allowedTypes.test(file.mimetype);
     const extValid = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+
+    req.maxFileSize = maxSize; // 👈 store max size in req for use in error handler
 
     if (mimetypeValid && extValid) {
       cb(null, true);

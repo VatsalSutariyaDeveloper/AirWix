@@ -48,5 +48,12 @@ module.exports = {
       status: 200,
       message: `${name} deleted successfully`,
     }),
+    SOFT_DELETE: (name = "Record") => ({
+      code: "SOFT_DELETE_SUCCESS",
+      status: 200,
+      message: `${name} soft deleted successfully`,
+    }),
+
   },
+  
 };
