@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const ItemTaxTemplate = sequelize.define('ItemTaxTemplate', {
-    tax_name: { type: DataTypes.STRING(100), allowNull: false },
+    tax_name: { type: DataTypes.STRING, allowNull: false },
     gst_treatment: {
       type: DataTypes.ENUM('Taxable', 'Nil-Rated', 'Exempted', 'Non-GST'),
       allowNull: false

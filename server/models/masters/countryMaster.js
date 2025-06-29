@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const CountryMaster = sequelize.define("CountryMaster", {
     country_name: { type: DataTypes.STRING, allowNull: false },
-    country_initial: { type: DataTypes.STRING(10), allowNull: false },
-    country_code: { type: DataTypes.STRING(10), allowNull: false },
+    country_initial: { type: DataTypes.STRING, allowNull: false },
+    country_code: { type: DataTypes.STRING, allowNull: false },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,

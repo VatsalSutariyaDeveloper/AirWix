@@ -1,0 +1,102 @@
+const { InquiryNote } = require("../../../models/masterModels");
+const commonQuery = require("../../../helpers/commonQuery");
+const validateRequest = require("../../../helpers/validateRequest");
+const sequelize = require("../../../config/database");
+const MODULE = "Inquiry Note";
+
+// Create
+exports.create = async (req, res) => {
+  const requiredFields = {
+    inquiry_id: "Inquiry ID",
+    title: "Title",
+    user_id: "User",
+    branch_id: "Branch",
+    company_id: "Company"
+  };
+
+  const errors = await validateRequest(req.body, requiredFields);
+  if (errors.length) return res.status(400).json({ status: false, message: "VALIDATION_ERROR", errors });
+
+  try {
+    const result = await commonQuery.createRecord(InquiryNote, {
+      ...req.body,
+      status: req.body.status ?? 0
+    });
+
+    res.status(201).json({ status: true, message: `${MODULE} Created`, data: result });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "SERVER_ERROR", error: err.message });
+  }
+};
+
+// Get All
+exports.getAll = async (req, res) => {
+  try {
+    const result = await commonQuery.findAllRecords(InquiryNote, { status: 0 });
+    res.json({ status: true, data: result });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "SERVER_ERROR", error: err.message });
+  }
+};
+
+// Get By ID
+exports.getById = async (req, res) => {
+  try {
+    const record = await commonQuery.findOneById(InquiryNote, req.params.id);
+    if (!record || record.status === 2) return res.status(404).json({ status: false, message: "Not Found" });
+
+    res.json({ status: true, data: record });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "SERVER_ERROR", error: err.message });
+  }
+};
+
+// Update
+exports.update = async (req, res) => {
+  try {
+    const updated = await commonQuery.updateRecordById(InquiryNote, req.params.id, req.body);
+    if (!updated) return res.status(404).json({ status: false, message: "Not Found or No Changes" });
+
+    res.json({ status: true, message: "Inquiry Note Updated", data: updated });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "SERVER_ERROR", error: err.message });
+  }
+};
+
+// Delete (Soft Delete)
+exports.delete = async (req, res) => {
+  try {
+    const [result] = await sequelize.query(`
+      UPDATE inquiry_note
+      SET status = 2, updated_at = NOW()
+      WHERE id = ?
+    `, {
+      replacements: [req.params.id]
+    });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ status: false, message: `${MODULE} Not Found` });
+    }
+
+    res.json({ status: true, message: `${MODULE} Deleted (Soft)` });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "SERVER_ERROR", error: err.message });
+  }
+};
+
+// Update Status
+exports.updateStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (![0, 1, 2].includes(Number(status))) {
+      return res.status(400).json({ status: false, message: "Invalid status (0, 1, 2 allowed)" });
+    }
+
+    const updated = await commonQuery.updateRecordById(InquiryNote, req.params.id, { status });
+    if (!updated) return res.status(404).json({ status: false, message: `${MODULE} Not Found` });
+
+    res.json({ status: true, message: `${MODULE} Status Updated`, data: updated });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "SERVER_ERROR", error: err.message });
+  }
+};

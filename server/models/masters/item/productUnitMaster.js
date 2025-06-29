@@ -1,7 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
   const ProductUnitMaster = sequelize.define("ProductUnitMaster", {
-    unit_name: { type: DataTypes.STRING(100),allowNull: false,unique: true},
-    gst_code: { type: DataTypes.STRING,allowNull: true,comment: "Used for e-way bill generation" },
+    unit_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    gst_code: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "Used for e-way bill generation"
+    },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,

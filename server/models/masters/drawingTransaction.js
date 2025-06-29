@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const DrawingTransaction = sequelize.define("DrawingTransaction", {
+  const DrawingTransaction = sequelize.define('DrawingTransaction', {
     drawing_id: { type: DataTypes.INTEGER, allowNull: false },
-    drawing_image_name: { type: DataTypes.STRING(255), allowNull: false },
-    image_title: { type: DataTypes.STRING(100), allowNull: false },
+    drawing_image_name: { type: DataTypes.STRING, allowNull: false },
+    image_title: { type: DataTypes.STRING, allowNull: false },
     remark: { type: DataTypes.TEXT, allowNull: true },
     status: {
       type: DataTypes.TINYINT,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     branch_id: { type: DataTypes.INTEGER, allowNull: false },
     company_id: { type: DataTypes.INTEGER, allowNull: false }
   }, {
-    tableName: "drawing_transaction",
+    tableName: 'drawing_transactions',
     timestamps: true,
     underscored: true
   });

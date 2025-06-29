@@ -49,7 +49,6 @@ module.exports = (req, res, next) => {
 
   res.error = (type, details = {}) => {
     const responseObj = responseCodes[type] || responseCodes.SERVER_ERROR;
-    
     return res.status(responseObj.status).json({
       ...responseObj,
       ...details,
