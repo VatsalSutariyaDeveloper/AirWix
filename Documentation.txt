@@ -1,0 +1,105 @@
+=> All Dashboards
+- Director Dasboard
+- Monitoring Dashboard
+- Trasaction Dashboard
+- Statict Dashboard
+- CRM Dashboard
+- Purchase Dashboard
+- Production Dashboard
+- Resource Dashboard
+-* Inventory Dashboard
+- Service Dashboard
+-* Finance Dashboard
+Note :- * Not In BRP
+
+===> Director Dashboard :-
+    ==> Director Dashboard
+    ==> Monitoring Dashboard
+    ==> Trasaction Dashboard
+
+===> Working Dashboard :- 
+    ==> CRM Module :-
+        => Dashboard List :-
+            - Add Inquiry 
+            - Inquiry Followup (Inquiry Followup Task Create When Inquiry Generate After Ne Followup Task Generate Untill Inquiry Won)
+            - Quotation Create (Quotation Create From inquiry When Inquiry Won then Inquiry Data show in this list)
+            - Pending Quotation Approval (Quotation Approve)
+            - Revise Quotation (If Quotation Disapprove Then it's revise for changes)
+            - Quotation Followup (Quotation Followup Task Create When Quotation Create After New Followup Task Generate Untill Quotation Won)
+            - Pending Sales Order (When Quotation Approve Then Show its detail in this list from create Sales order from quotation)
+            - Sales Order Approval (Sales Order Approval After Sales Order Create)
+            - Revise Sales Order (Revise Sales Order After Sales Order Disapprove)
+            - Pending Order Accept (After Sales Order Approve It's Data show in Pending Order Accept List)
+            - Sales Order Stocck Allocation (Sales Order Stock is Available Then Allocate Stock)
+
+        => Sidebar List :-
+            - Statict Dashboard
+            - CRM Dashboard
+            - Inquiry List (Add / Edit / Delete)
+            - Quotation List (Add / Edit / Delete)
+            - Task List (Inquiry / Quotation Followup Data Show) (Add / Edit / Delete)
+            - Appointment List (Create Appoinment Inquiry Related Or Other) (Add / Edit / Delete)
+            - General Task List (General Task use for local task add) (Add / Edit / Delete)
+            - Order Conformation List (Quotation Won Data show here)
+            - Sales Order List (Add / Edit / Delete)
+            - Order Acceptance List (Pending Order Accept List) (Approval)
+            - Proforma Invoice (Proforma Invoice Create Using Sales Order / Quotation / Direct) (Add / Edit / Delete)
+            - CRM Master :-
+                - Party Industry
+                - Master Category
+                - Party List
+                - Territory List
+                - Terms & Condition Category
+                - Term & Condition
+                - Annexure List
+                - Sale Stage
+                - Source List
+                - Reason List
+                - General Task Mst
+            - CRM Reports
+                - Only make List Page Like CRM Master We are include in Future
+    
+    ==> Purchase Module :-
+        => Dashboard List 
+            - Pending Indent (Create Indent / Create Multiple Indent)
+            - Purchase Quotation List (Purchase Quotation Comparision Using Created Indent Data Quotation Comparision Yes) 
+            - Purchase Quotation Approval (Approve Quotation Using Comparision)
+            - Purchase Order Pending (Single Product Puchase Order OR Mutiple Product Purchase Order it comes from indent where Comparision No and also come from Purchase Quotation Approval)
+            - Purchase order Pending Approval 
+            - Purchase Order Finance Approval
+            - Purchase Order Disapprove (Show Approval Log And PO Revise Option)
+            - Pending Inward (Filter :- Overdue Inward / Today Inward / All Inward)
+            - Goods Purchase Bill (Purchase Order's Purchase Bill Entry data come from purchase order inward successfully)
+            - Service Purchase Bill
+            - JobWork Purchase Bill
+            - Pending Debit Note
+
+        => Sidebar List :-
+            - Purchase Dashboard
+            - Indent List (Add / Edit / Delete)
+            - Purchase Order List (Add / Edit / Delete)
+            - Purchase Order Short Close List
+            - Inward List (Filter :- Pending / Done , Functionality :- Add GRN / Edit)
+            - Purchase Quotation List (All / Pending / Done)
+            - Purchase Bill List (Filter :- Pending / Done , Functionality :- Add / Edit / Delete)
+            - Purchase Debit Note (Filter :- Pending / Done , Functionality :- Add / Edit / Delete)
+            - Purchase Report 
+                - Vendor Analysis
+                - Purchase Bil By Item
+                - Purchase Bill Summary
+                - Purchase Order Summary
+
+
+
+
+
+
+
+Company Setting - If No Invoice Create After Dispatch
+Dispatch => Pending Dispatch (After Sales Order Stock Allocation Show Here for Dispatch)
+Finance => Pending Invoice (After Sales Order Dispatch Show Here for Create Invoice)
+
+Company Setting - If Yes Invoice Create After Dispatch
+Finance => Pending Invoice (After Sales Order Stock Allocation Show Here for Create Invoice)
+Dispatch => Pending Dispatch (After Sales Order Invoice Show Here for Dispatch)
+
