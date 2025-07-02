@@ -1,30 +1,5 @@
 const responseCodes = require("../helpers/responseCodes");
 
-// module.exports = (req, res, next) => {
-//   res.error = (type, extra = {}) => {
-//     const codeObj = responseCodes[type] || responseCodes.SERVER_ERROR;
-//     return res.status(codeObj.status).json({
-//       code: codeObj.code,
-//       message: codeObj.message,
-//       ...extra,
-//     });
-//   };
-
-//   res.success = (action = "CREATE", name = "Record", data = {}) => {
-//     const codeObj = responseCodes.SUCCESS?.[action]?.(name);
-//     if (!codeObj) {
-//       return res.status(200).json({ message: "Success", data });
-//     }
-
-//     return res.status(codeObj.status).json({
-//       code: codeObj.code,
-//       message: codeObj.message,
-//       data,
-//     });
-//   };
-
-//   next();
-// };
 module.exports = (req, res, next) => {
   res.success = (action, module = "Record", data = null) => {
     let responseObj;

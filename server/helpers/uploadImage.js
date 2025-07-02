@@ -15,7 +15,9 @@ const uploadImage = (maxSize = 5 * 1024 * 1024) => { // default: 5MB
     if (mimetypeValid && extValid) {
       cb(null, true);
     } else {
-      cb(new Error("Only JPG, JPEG, and PNG image files are allowed"));
+      const error = new Error("Only JPG, JPEG, and PNG image files are allowed");
+      error.code = "INVALID_FILE_TYPE"; // 👈 set custom code
+      cb(error);
     }
   };
 
