@@ -1,11 +1,17 @@
-'use client'
+'use client';
 
 import InquiryTable from './InquiryTable';
+import Breadcrumb from '@/components/Breadcrumb'; // Adjust path if needed
 
 export default function Page() {
+  const breadcrumbItems = [
+    { label: 'Home', href: '/' },
+    { label: 'Inquiry List' },
+  ];
+
   return (
     <div className="p-4 text-black">
-      {/* <h1 className="text-xl font-bold mb-4">CRM Inquiries</h1> */}
+      <Breadcrumb items={breadcrumbItems} />
       <InquiryTable />
     </div>
   );

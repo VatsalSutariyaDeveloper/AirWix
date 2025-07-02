@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="p-5 overflow-auto min-h-screen bg-gray-100"
+            className="overflow-auto min-h-screen bg-gray-100"
           >
             {children}
           </motion.main>
