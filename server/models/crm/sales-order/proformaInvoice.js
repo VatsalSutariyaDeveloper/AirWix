@@ -1,0 +1,63 @@
+module.exports = (sequelize, DataTypes) => {
+  const ProformaInvoice = sequelize.define("ProformaInvoice", {
+    series_id: { type: DataTypes.INTEGER },
+    proforma_invoice_no: { type: DataTypes.STRING, allowNull: false, unique: true },
+    proforma_invoice_date: { type: DataTypes.DATEONLY },
+    proforma_invoice_type: { type: DataTypes.STRING },
+    customer_id: { type: DataTypes.INTEGER },
+    enable_consignee: { type: DataTypes.BOOLEAN },
+    consignee_id: { type: DataTypes.INTEGER },
+    challan_no: { type: DataTypes.STRING },
+    challan_date: { type: DataTypes.DATEONLY },
+    sales_order_id: { type: DataTypes.INTEGER },
+    quotation_id: { type: DataTypes.INTEGER },
+    order_no: { type: DataTypes.STRING },
+    order_date: { type: DataTypes.DATEONLY },
+    payment_terms: { type: DataTypes.STRING },
+    vehical_no: { type: DataTypes.STRING },
+    enable_currency: { type: DataTypes.BOOLEAN },
+    currency_id: { type: DataTypes.INTEGER },
+    currency_rate: { type: DataTypes.DECIMAL(10, 2) },
+    gst_type: { type: DataTypes.STRING },
+    terms_of_delivery: { type: DataTypes.TEXT },
+    destination: { type: DataTypes.STRING },
+    dispatch_id: { type: DataTypes.INTEGER },
+    discount_per: { type: DataTypes.DECIMAL(10, 2) },
+    discount_amount: { type: DataTypes.DECIMAL(10, 2) },
+    discount_convert_amount: { type: DataTypes.DECIMAL(10, 2) },
+    tax_1_name: { type: DataTypes.STRING },
+    tax_1_amount: { type: DataTypes.DECIMAL(10, 2) },
+    tax_2_name: { type: DataTypes.STRING },
+    tax_2_amount: { type: DataTypes.DECIMAL(10, 2) },
+    tax_3_name: { type: DataTypes.STRING },
+    tax_3_amount: { type: DataTypes.DECIMAL(10, 2) },
+    basic_amount: { type: DataTypes.DECIMAL(10, 2) },
+    basic_convert_amount: { type: DataTypes.DECIMAL(10, 2) },
+    advance_payment: { type: DataTypes.DECIMAL(10, 2) },
+    advance_payment_convert: { type: DataTypes.DECIMAL(10, 2) },
+    payable_amount: { type: DataTypes.DECIMAL(10, 2) },
+    payable_amount_convert: { type: DataTypes.DECIMAL(10, 2) },
+    remark: { type: DataTypes.TEXT },
+    reserve_charge: { type: DataTypes.STRING },
+    invoice_status: { type: DataTypes.STRING },
+    approval_status: { type: DataTypes.STRING },
+    terms_condition_formet_id: { type: DataTypes.INTEGER },
+    terms_condition: { type: DataTypes.TEXT },
+    grand_total: { type: DataTypes.DECIMAL(10, 2) },
+    grand_total_convert: { type: DataTypes.DECIMAL(10, 2) },
+    user_id: { type: DataTypes.INTEGER },
+    branch_id: { type: DataTypes.INTEGER },
+    company_id: { type: DataTypes.INTEGER },
+    status: {
+      type: DataTypes.TINYINT,
+      defaultValue: 0,
+      comment: "0: Active, 1: Inactive, 2: Deleted"
+    }
+  }, {
+    tableName: "proforma_invoice",
+    timestamps: true,
+    underscored: true
+  });
+
+  return ProformaInvoice;
+};

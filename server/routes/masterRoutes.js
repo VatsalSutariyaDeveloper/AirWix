@@ -134,6 +134,7 @@ const productSpecificationMasterRoutes = require("./masters/productSpecification
 const productSpecificationValueMasterRoutes = require("./masters/productSpecificationValueMasterRoutes");
 const qcParameterMasterRoutes = require("./masters/qcParameterMasterRoutes");
 const gstTypeMasterRoutes = require("./masters/gstTypeMasterRoutes");
+const productProcessRoutes = require("./masters/item/productProcessRoutes");
 
 
 // Mount product routes
@@ -174,6 +175,7 @@ router.use("/transpotation", transpotationMasterRoutes);
 router.use("/godown", godownMasterRoutes);
 router.use("/process-type", processTypeMasterRoutes);
 router.use("/process-list", processListMasterRoutes);
+router.use("/product-process", productProcessRoutes);
 router.use("/product-specification", productSpecificationMasterRoutes);
 router.use("/product-specification-value", productSpecificationValueMasterRoutes);
 router.use("/qc-parameter", qcParameterMasterRoutes);

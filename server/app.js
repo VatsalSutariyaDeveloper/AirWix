@@ -8,6 +8,8 @@ const errorHandler = require("./middlewares/errorHandler");
 const masterRoutes = require("./routes/masterRoutes");
 const masterItemRoutes = require("./routes/masterItemRoutes");
 const crmRoutes = require("./routes/crmRoutes");
+const purchaseRoutes = require("./routes/purchaseRoutes");
+const productionRoutes = require("./routes/productionRoutes");
 const administrationRoutes = require("./routes/administrationRoutes");
 const user = require("./routes/userRoutes");
 
@@ -25,6 +27,8 @@ app.use(responseFormatter);
 app.use("/masters/item", masterItemRoutes);
 app.use("/masters", masterRoutes);
 app.use("/crm", crmRoutes);
+app.use("/purchase", purchaseRoutes);
+app.use("/production", productionRoutes);
 app.use("/administration", administrationRoutes);
 app.use("/user", user);
 

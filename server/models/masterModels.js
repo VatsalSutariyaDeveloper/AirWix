@@ -12,6 +12,7 @@ const ItemMasterFieldValue = require("./masters/item/itemMasterFieldValue")(sequ
 const ItemMasterFieldName = require("./masters/item/itemMasterFieldName")(sequelize, DataTypes);
 const ProductUnitMaster = require("./masters/item/productUnitMaster")(sequelize, DataTypes);
 const ItemMaster = require("./masters/item/itemMaster")(sequelize, DataTypes);
+const ProductProcess = require("./masters/item/productProcess")(sequelize, DataTypes);
 
 // Add more as needed...
 
@@ -54,6 +55,7 @@ module.exports = {
   HSNMasterTransaction,
   ItemMasterFieldValue,
   ItemMasterFieldName,
+  ProductProcess,
   ProductUnitMaster,
   ItemMaster,
   BranchMaster,
