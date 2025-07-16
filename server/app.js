@@ -12,6 +12,7 @@ const purchaseRoutes = require("./routes/purchaseRoutes");
 const productionRoutes = require("./routes/productionRoutes");
 const administrationRoutes = require("./routes/administrationRoutes");
 const user = require("./routes/userRoutes");
+const designDepartmentRoutes = require("./routes/designDepartmentRoutes");
 
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/purchase", purchaseRoutes);
 app.use("/production", productionRoutes);
 app.use("/administration", administrationRoutes);
 app.use("/user", user);
+app.use("/design-department", designDepartmentRoutes);
 
 
 app.use(errorHandler);
