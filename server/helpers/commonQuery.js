@@ -16,8 +16,11 @@ module.exports = {
 
   // 3. Soft delete by ID (status = 2)
   softDeleteById: async (model, id) => {
-    const record = await model.findByPk(id);
-    if (!record || record.status === 2) return null;
+    if (!id || !model) throw new Error("Invalid parameters passed to softDeleteById.");
+
+    const record = await model.findOne({ where: { id, status: { [Op.ne]: 0 } } });
+    if (!record) return null;
+
     await record.update({ status: 2 });
     return record;
   },
