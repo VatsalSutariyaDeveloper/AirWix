@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     quotation_condition: { type: DataTypes.TEXT },
     invoice_status: { type: DataTypes.STRING(50) },
     invoice_id: { type: DataTypes.INTEGER },
-    delivery_type: { type: DataTypes.TINYINT },
+    delivery_type: { type: DataTypes.TINYINT,defaultValue: 0, comment: "0 = SO Wise, 1 = Product Wise" },
     delivery_date: { type: DataTypes.DATEONLY },
     po_no: { type: DataTypes.STRING(100) },
     po_date: { type: DataTypes.DATEONLY },

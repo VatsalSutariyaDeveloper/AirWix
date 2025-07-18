@@ -2,7 +2,7 @@
 const sequelize = require("../config/database");
 const { DataTypes } = require("sequelize");
 
-// Load item models under masters
+// Load Purchase models
 const IndentApproval  = require("./purchase/indentApproval")(sequelize, DataTypes);
 const PurchaseQuotation = require("./purchase/quotation")(sequelize, DataTypes);
 const PurchaseQuotationRef = require("./purchase/quotationRef")(sequelize, DataTypes);

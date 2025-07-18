@@ -1,10 +1,12 @@
-const { SalesOrder } = require("../../../models/crmModels");
-const validateRequest = require("../../../helpers/validateRequest");
+const { SalesOrder, SalesOrderTransaction,SalesOrderDeliveryDate } = require("../../../models/crmModels");
+const sequelize = require("../../../config/database");
 const commonQuery = require("../../../helpers/commonQuery");
+const { createBillSundries,createTaxTransactions, updateSeries  } = require("../../../helpers/functions/transaction_functions");
+const validateRequest = require("../../../helpers/validateRequest");
 
 const MODULE = "Sales Order";
 
-// Create Sales Order
+// Create Sales Order + SalesOrderTransactions + BillSundries
 exports.create = async (req, res) => {
   const requiredFields = {
     sales_order_no: "Sales Order No",
@@ -19,13 +21,100 @@ exports.create = async (req, res) => {
   const errors = await validateRequest(req.body, requiredFields);
   if (errors.length) return res.error("VALIDATION_ERROR", { errors });
 
+  const transaction = await sequelize.transaction();
   try {
-    const result = await commonQuery.createRecord(SalesOrder, req.body);
-    return res.success("CREATE", MODULE, result);
+    const { bill_sundries, sales_order_transactions,tax_transactions, ...salesOrderData } = req.body;
+
+    // 1. Create Sales Order
+    const salesOrder = await commonQuery.createRecord(SalesOrder, salesOrderData, transaction);
+    let { delivery_type } = req.body;
+
+    if (typeof delivery_type === "undefined") {
+      const fullSalesOrder = await SalesOrder.findOne({
+        where: { id: salesOrder.id },
+        attributes: ['delivery_type'],
+        transaction
+      });
+      delivery_type = fullSalesOrder?.delivery_type;
+    }
+
+    // 2. Create Sales Order Transactions (+ delivery if needed)
+    if (Array.isArray(sales_order_transactions) && sales_order_transactions.length) {
+      for (const trn of sales_order_transactions) {
+        const createdTrn = await commonQuery.createRecord(
+          SalesOrderTransaction,
+          { ...trn, sales_order_id: salesOrder.id },
+          transaction
+        );
+
+        // 2a. If delivery_type is 1, insert delivery date record
+        if (delivery_type === 1 && Array.isArray(trn.delivery_dates)) {
+          for (const delivery of trn.delivery_dates) {
+            const deliveryData = {
+              ...delivery,
+              sales_order_transaction_id: createdTrn.id,
+              user_id: trn.user_id,
+              branch_id: trn.branch_id,
+              company_id: trn.company_id,
+            };
+
+            const deliveryErrors = await validateRequest(deliveryData, {
+              sales_order_transaction_id: "Sales Order Transaction",
+              delivery_date: "Delivery Date",
+              product_unit: "Product Unit",
+              product_qty: "Product Quantity",
+              used_qty: "Used Quantity",
+              user_id: "User",
+              branch_id: "Branch",
+              company_id: "Company",
+            });
+
+            if (deliveryErrors.length) {
+              throw new Error(
+                `Delivery Date Error (Product: ${trn.product_id}): ${deliveryErrors.join(", ")}`
+              );
+            }
+
+            await commonQuery.createRecord(SalesOrderDeliveryDate, deliveryData, transaction);
+          }
+        }
+      }
+    }
+
+    // 3. Create Bill Sundry Entries
+    if (Array.isArray(bill_sundries) && bill_sundries.length) {
+      await createBillSundries({
+        sundries: bill_sundries,
+        module_transaction_id: salesOrder.id,
+        transaction,
+      });
+    }
+
+    // 4. Create Tax Transactions
+    if (Array.isArray(tax_transactions) && tax_transactions.length) {
+      await createTaxTransactions({
+        taxes: tax_transactions,
+        module_transaction_id: salesOrder.id,
+        transaction,
+      });
+    }
+
+    await updateSeries(
+      {
+        module_id: req.body.module_id,
+        series_id: req.body.series_type_id // Ensure this is in request
+      },
+      transaction
+    );
+    
+    await transaction.commit();
+    return res.success("CREATE", MODULE, salesOrder);
   } catch (err) {
+    await transaction.rollback();
     return res.error("SERVER_ERROR", { error: err.message });
   }
 };
+
 
 // Get All Sales Orders
 exports.getAll = async (req, res) => {

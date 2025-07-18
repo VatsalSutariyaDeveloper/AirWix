@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const SeriesTypeMaster = sequelize.define("SeriesTypeMaster", {
-    module_name_id: { type: DataTypes.INTEGER, allowNull: false },
+    module_id: { type: DataTypes.INTEGER, allowNull: false },
+    financial_year_id: { type: DataTypes.INTEGER, allowNull: false },
     series_type_name: { type: DataTypes.STRING(100), allowNull: false, unique: true },
     start_series: { type: DataTypes.STRING(50), allowNull: true },
-    series_formet: { type: DataTypes.STRING(50), allowNull: true },
-    formet_value: { type: DataTypes.STRING(50), allowNull: true },
-    end_formet_value: { type: DataTypes.STRING(50), allowNull: true },
-    gst_code: { type: DataTypes.STRING(20), allowNull: true },
+    series_format: { type: DataTypes.STRING(50), allowNull: true },
+    format_value: { type: DataTypes.STRING(50), allowNull: true },
+    end_format_value: { type: DataTypes.STRING(50), allowNull: true },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,
