@@ -2,9 +2,22 @@ const { Op } = require("sequelize");
 
 module.exports = {
   // 1. Create a new record
-  createRecord: async (model, data) => {
-    return await model.create(data);
-  },
+ createRecord: async (model, data, transaction = null) => {
+  return await model.create(data, transaction ? { transaction } : {});
+},
+// createRecord: async (model, data, transaction = null) => {
+//   const filteredData = Object.fromEntries(
+//     Object.entries(data).filter(([key]) => key in model.rawAttributes)
+//   );
+
+//   const options = {};
+//   if (transaction) options.transaction = transaction;
+
+//   return await model.create(filteredData, options);
+// }
+
+
+
 
   // 2. Update a record by ID
   updateRecordById: async (model, where, data) => {

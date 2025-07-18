@@ -6,7 +6,7 @@ const MODULE = "Series Type";
 
 exports.create = async (req, res) => {
   const requiredFields = {
-    module_name_id: "Module Name ID",
+    module_id: "Module Name",
     series_type_name: "Series Type Name",
     user_id: "User",
     branch_id: "Branch",
@@ -51,7 +51,7 @@ exports.getById = async (req, res) => {
 
 exports.update = async (req, res) => {
   const requiredFields = {
-    module_name_id: "Module Name ID",
+    module_id: "Module Name",
     series_type_name: "Series Type Name",
     user_id: "User",
     branch_id: "Branch",
