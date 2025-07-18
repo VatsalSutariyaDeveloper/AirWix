@@ -1,8 +1,9 @@
 // models/masters/index.js
+
 const sequelize = require("../config/database");
 const { DataTypes } = require("sequelize");
 
-// Load item models under masters
+// Initialize all models
 const InquiryTypeMaster = require("./crm/inquiry/inquiryTypeMaster")(sequelize, DataTypes);
 const Inquiry = require("./crm/inquiry/inquiry")(sequelize, DataTypes);
 const InquiryTransaction = require("./crm/inquiry/inquiryTransaction")(sequelize, DataTypes);
@@ -22,16 +23,14 @@ const WorkOrderReservTemp = require("./crm/sales-order/workOrderReservTemp")(seq
 const SalesOrderProductionTransaction = require("./crm/sales-order/salesOrderProductionTransaction")(sequelize, DataTypes);
 const ProformaInvoice = require("./crm/sales-order/proformaInvoice")(sequelize, DataTypes);
 
-
 const Quotation = require("./crm/quotation/quotation")(sequelize, DataTypes);
 const QuotationTransaction = require("./crm/quotation/quotationTransaction")(sequelize, DataTypes);
 const QuotationTermsTransaction = require("./crm/quotation/quotationTermsTransaction")(sequelize, DataTypes);
 const QuotationAttachment = require("./crm/quotation/quotationAttachment")(sequelize, DataTypes);
 const QuotationApproveLog = require("./crm/quotation/quotationApproveLog")(sequelize, DataTypes);
 
-// Add more as needed...
-
-module.exports = {
+// Collect all in db object
+const db = {
   InquiryTypeMaster,
   Inquiry,
   InquiryTransaction,
@@ -55,3 +54,16 @@ module.exports = {
   QuotationAttachment,
   QuotationApproveLog,
 };
+
+// Apply associations (IMPORTANT)
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db); // pass all models
+  }
+});
+
+// Optional: Export Sequelize instance
+db.sequelize = sequelize;
+db.Sequelize = require("sequelize");
+
+module.exports = db;
