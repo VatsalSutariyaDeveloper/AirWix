@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     rate: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
     description: { type: DataTypes.TEXT, allowNull: true },
     specification: { type: DataTypes.TEXT, allowNull: true },
+    batch_wise_stock_manage: { type: DataTypes.INTEGER, allowNull: false },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,
