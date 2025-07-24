@@ -2,8 +2,6 @@ module.exports = (sequelize, DataTypes) => {
   const QuotationComparisonTrnReq = sequelize.define("QuotationComparisonTrnReq", {
     qc_request_id: { type: DataTypes.INTEGER, allowNull: true },
     approve_indent_id: { type: DataTypes.INTEGER },
-    supplier_details_id: { type: DataTypes.INTEGER },
-    vendor_id: { type: DataTypes.INTEGER, allowNull: true },
     product_id: { type: DataTypes.INTEGER, allowNull: false },
     unit_id: { type: DataTypes.INTEGER, allowNull: false },
     product_qty: { type: DataTypes.DECIMAL(15,5), allowNull: false },
