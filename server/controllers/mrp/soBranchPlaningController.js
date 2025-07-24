@@ -150,6 +150,7 @@ exports.getAll = async (req, res) => {
 // Assign Standard BOM to Sales Order Transaction
 exports.assignBranch = async (req, res) => {
   const { production_branch_id, sales_order_trn_id } = req.body;
+  const transaction = await sequelize.transaction();
 
   if (!production_branch_id || !sales_order_trn_id) {
     return res.error("VALIDATION_ERROR", {
@@ -162,15 +163,17 @@ exports.assignBranch = async (req, res) => {
     const updated = await commonQuery.updateRecordById(
       SalesOrderTransaction,
       sales_order_trn_id,
-      updateData
+      updateData,
+      transaction
     );
-
+    transaction.commit();
     if (updated) {
       return res.success("UPDATE", MODULE, { success: true });
     } else {
       return res.success("UPDATE", MODULE, { success: false });
     }
   } catch (error) {
+    await transaction.rollback();
     return res.error("SERVER_ERROR", { error: error.message });
   }
 };

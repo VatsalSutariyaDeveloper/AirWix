@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('Taxable', 'Nil-Rated', 'Exempted', 'Non-GST'),
       allowNull: false
     },
-    gst_rate: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
-    cgst: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0 },
-    sgst: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0 },
-    igst: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0 },
+    gst_rate: { type: DataTypes.DECIMAL(15,5), allowNull: true },
+    cgst: { type: DataTypes.DECIMAL(15,5), defaultValue: 0 },
+    sgst: { type: DataTypes.DECIMAL(15,5), defaultValue: 0 },
+    igst: { type: DataTypes.DECIMAL(15,5), defaultValue: 0 },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,

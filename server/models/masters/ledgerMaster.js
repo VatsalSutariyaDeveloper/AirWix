@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     profile_photo: { type: DataTypes.STRING(255), allowNull: true },
     email: { type: DataTypes.STRING(100), allowNull: true },
     opening_balance_type: { type: DataTypes.STRING(50), allowNull: true },
-    opening_balance: { type: DataTypes.DECIMAL(15, 2), allowNull: true },
+    opening_balance: { type: DataTypes.DECIMAL(115,5), allowNull: true },
     address: { type: DataTypes.TEXT, allowNull: true },
     state_id: { type: DataTypes.INTEGER, allowNull: true },
     city_id: { type: DataTypes.INTEGER, allowNull: true },

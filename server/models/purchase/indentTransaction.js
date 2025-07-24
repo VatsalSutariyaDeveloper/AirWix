@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     conversion_unit_id: { type: DataTypes.INTEGER, allowNull: true },
     purchase_card_transaction_id: { type: DataTypes.INTEGER, allowNull: true },
     product_description: { type: DataTypes.TEXT, allowNull: true },
-    product_quantity: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
-    product_conversion_quantity: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
-    rate: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
+    product_quantity: { type: DataTypes.DECIMAL(15,5), allowNull: false },
+    product_conversion_quantity: { type: DataTypes.DECIMAL(15,5), allowNull: true },
+    rate: { type: DataTypes.DECIMAL(15,5), allowNull: true },
     attached_document: { type: DataTypes.STRING(255), allowNull: true },
     status: {
       type: DataTypes.TINYINT,

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       batch_stock_no: { type: DataTypes.STRING(100) },
       godown_id: { type: DataTypes.INTEGER },
       product_unit: { type: DataTypes.INTEGER },
-      product_qty: { type: DataTypes.DECIMAL(10, 2) },
+      product_qty: { type: DataTypes.DECIMAL(15,5) },
       status: {
         type: DataTypes.TINYINT,
         defaultValue: 0,

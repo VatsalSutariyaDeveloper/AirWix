@@ -10,6 +10,7 @@ const commonQuery = require("../commonQuery");
 const moment = require("moment");
 const { convertStock, getExpDateByProduct } = require("./helperFunction");
 const { getProductDetail } = require("./commonFucntions");
+const { fixDecimals } = require("./helperFunction");
 // const { session } = require("../middleware/authMiddleware");
 
 exports.addStock = async ({
@@ -67,28 +68,34 @@ exports.addStock = async ({
   }
   
   const product = await getProductDetail(product_id, transaction);
-  let base_stock = product_qty;
-  let con_stock = product_qty;
+  let base_stock = fixDecimals(product_qty);
+  let con_stock = fixDecimals(product_qty);
   if (product.purchase_unit !== product.production_unit) {
     if (batch_id) {
       const batch = await commonQuery.findOneById(BatchData, batch_id, transaction);
       if (product.purchase_unit === product_unit) {
-        con_stock = product_qty;
-        base_stock = (con_stock / batch.conv_qty) * batch.base_qty;
+        con_stock = fixDecimals(product_qty);
+        base_stock = (fixDecimals(con_stock) / fixDecimals(batch.conv_qty)) * fixDecimals(batch.base_qty);
       } else {
-        base_stock = product_qty;
-        con_stock = (base_stock / batch.base_qty) * batch.conv_qty;
+        base_stock = fixDecimals(product_qty);
+        con_stock = (fixDecimals(base_stock) / fixDecimals(batch.base_qty)) * fixDecimals(batch.conv_qty);
       }
     } else {
       if (product.purchase_unit === product_unit) {
-        con_stock = product_qty;
-        base_stock = await convertStock(product_qty, product_id, "base_unit");
+        con_stock = fixDecimals(product_qty);
+        base_stock = fixDecimals(await convertStock(fixDecimals(product_qty), product_id, "base_unit"));
       } else {
-        base_stock = product_qty;
-        con_stock = await convertStock(product_qty, product_id, "conv_unit");
+        base_stock = fixDecimals(product_qty);
+        con_stock = fixDecimals(await convertStock(fixDecimals(product_qty), product_id, "conv_unit"));
       }
     }
   }
+
+  // Fix decimals for qty, rate, and amount
+  base_stock = fixDecimals(base_stock, 2);
+  con_stock = fixDecimals(con_stock, 2);
+  base_rate = fixDecimals(base_rate, 2);
+  conv_rate = fixDecimals(conv_rate, 2);
 
   infoGen = {
     ...infoGen,
@@ -117,8 +124,8 @@ exports.addStock = async ({
   };
 
   if (stock_flag === 2 && resStock) {
-    infoGen.base_rate = resStock.base_rate;
-    infoGen.conv_rate = resStock.conv_rate;
+    infoGen.base_rate = fixDecimals(resStock.base_rate, 2);
+    infoGen.conv_rate = fixDecimals(resStock.conv_rate, 2);
   }
   const inserted = await commonQuery.createRecord(
     StockTransaction,
@@ -157,9 +164,9 @@ exports.enterProductionStockEffect = async (
       const reserveData = {
         product_id: stock.product_id,
         product_base_unit: stock.product_base_unit,
-        product_base_qty: stock.product_base_qty,
+        product_base_qty: fixDecimals(stock.product_base_qty),
         product_convert_unit: stock.product_convert_unit,
-        product_convert_qty: stock.product_convert_qty,
+        product_convert_qty: fixDecimals(stock.product_convert_qty),
         stock_flag: 2,
         ref_name: stock.ref_name,
         ref_id: stock.ref_id,
@@ -180,7 +187,7 @@ exports.enterProductionStockEffect = async (
         ref_id: stock.ref_id,
         reserve_id: stock.id,
         godown_id: stock.godown_id,
-        product_qty: stock.product_base_qty,
+        product_qty: fixDecimals(stock.product_base_qty),
         stock_flag: 2,
         branch_id,
         perent_id: stock.stock_id,
@@ -215,13 +222,13 @@ exports.enterProductionStockEffect = async (
       ref_name: "Stock General",
       ref_id: batch.stock_general_trn_id,
       godown_id: batch.godown_id,
-      product_qty: batch.product_qty,
+      product_qty: fixDecimals(batch.product_qty),
       stock_flag: 1,
       branch_id,
       batch_id: batch.batch_id,
       batch_no: batch.batch_stock_no,
-      base_rate: batch.transaction.product_rate,
-      conv_rate: batch.transaction.product_conv_rate,
+      base_rate: fixDecimals(batch.transaction.product_rate, 2),
+      conv_rate: fixDecimals(batch.transaction.product_conv_rate, 2),
     });
   }
 };
@@ -274,17 +281,6 @@ exports.deleteProductStockEffect = async (
         true
       );
     }
-
-    // await ReserveStock.update(
-    //   { status: 2 },
-    //   {
-    //     where: {
-    //       ref_name: "Stock General",
-    //       ref_id: trn.id,
-    //     },
-    //     transaction,
-    //   }
-    // );
   }
 };
 
@@ -321,9 +317,9 @@ exports.itemReserveStockEntry = async (
     const info_stock = {
       product_id,
       product_base_unit: base_unit,
-      product_base_qty: base_stock,
+      product_base_qty: fixDecimals(base_stock),
       product_convert_unit: conv_unit,
-      product_convert_qty: con_stock,
+      product_convert_qty: fixDecimals(con_stock),
       stock_flag: 1,
       ref_name: chalan_type,
       ref_id: returnable_trn_id,
@@ -340,8 +336,8 @@ exports.itemReserveStockEntry = async (
     const existingStock = existingStockArr[0];
 
     if (existingStock) {
-      prev_stock = existingStock.base_stock;
-      prev_conv_stock = existingStock.convert_stock;
+      prev_stock = fixDecimals(existingStock.base_stock);
+      prev_conv_stock = fixDecimals(existingStock.convert_stock);
 
       await commonQuery.updateRecordById(
         ReserveStock,
@@ -364,13 +360,13 @@ exports.itemReserveStockEntry = async (
     );
 
     const used_base_stock =
-      parseFloat(stockTrn.used_base_qty) + parseFloat(base_stock);
+      fixDecimals(stockTrn.used_base_qty) + fixDecimals(base_stock);
     const used_convert_stock =
-      parseFloat(stockTrn.used_convert_qty) + parseFloat(con_stock);
+      fixDecimals(stockTrn.used_convert_qty) + fixDecimals(con_stock);
 
     const updatedTrn = {
-      used_base_qty: used_base_stock - prev_stock,
-      used_convert_qty: used_convert_stock - prev_conv_stock,
+      used_base_qty: fixDecimals(used_base_stock - prev_stock),
+      used_convert_qty: fixDecimals(used_convert_stock - prev_conv_stock),
     };
 
     await commonQuery.updateRecordById(

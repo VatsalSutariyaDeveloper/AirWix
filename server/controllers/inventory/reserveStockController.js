@@ -188,16 +188,14 @@ exports.getReserveStock = async (req, res) => {
       const prodId = appr.product_id;
       const used = usedStock.find((u) => u.product_id === prodId);
 
-      const approveBase = parseFloat(appr.get("total_product_base") || 0);
-      const approveConvert = parseFloat(appr.get("total_product_convert") || 0);
-      const usedBase = parseFloat(used?.get("total_used_base") || 0);
-      const usedConvert = parseFloat(used?.get("total_used_convert") || 0);
+      const approveBase = fixDecimals(appr.get("total_product_base") || 0);
+      const approveConvert = fixDecimals(appr.get("total_product_convert") || 0);
+      const usedBase = fixDecimals(used?.get("total_used_base") || 0);
+      const usedConvert = fixDecimals(used?.get("total_used_convert") || 0);
 
       return {
         product_id: prodId,
-        available_qty: parseFloat(
-          (approveBase + approveConvert - usedBase - usedConvert).toFixed(2)
-        ),
+        available_qty: fixDecimals(approveBase + approveConvert - usedBase - usedConvert),
       };
     });
 

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     purchase_quotation_date: { type: DataTypes.DATE },
     delivery_date: { type: DataTypes.DATE },
     payment_day: { type: DataTypes.INTEGER },
-    product_rate: { type: DataTypes.DECIMAL(10,2) },
+    product_rate: { type: DataTypes.DECIMAL(15,5) },
     purchase_quotation_status: { type: DataTypes.TINYINT },
     status: {
       type: DataTypes.TINYINT,

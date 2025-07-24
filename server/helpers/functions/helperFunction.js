@@ -2,6 +2,7 @@ const dayjs = require('dayjs');
 const commonQuery = require('../commonQuery');
 const { ItemMaster } = require('../../models');
 const { getProductDetail } = require('./commonFucntions');
+const { fixDecimals } = require('./commonFucntions');
 
 exports.getExpDateByProduct = async (product_id, mfgDate) => {
   try {
@@ -32,15 +33,17 @@ exports.convertStock = async (stock, productId, type) => {
       product_conv_qty
     } = product;
 
+    let result;
     if (product_base_unit !== product_conv_unit) {
       if (type === 'base_unit') {
-        return (stock / product_conv_qty) * product_base_qty;
+        result = (stock / product_conv_qty) * product_base_qty;
       } else {
-        return (stock / product_base_qty) * product_conv_qty;
+        result = (stock / product_base_qty) * product_conv_qty;
       }
     } else {
-      return stock;
+      result = stock;
     }
+    return fixDecimals(result);
   } catch (err) {
     console.error("Error in convertStockNew:", err);
     return 0;

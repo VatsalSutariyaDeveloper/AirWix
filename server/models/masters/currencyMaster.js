@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     currency_rate: {
-      type: DataTypes.DECIMAL(10, 4),
+      type: DataTypes.DECIMAL(15,5),
       allowNull: false
     },
     currency_symbol: {

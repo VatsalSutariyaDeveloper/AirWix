@@ -16,6 +16,7 @@ const sequelize = require("../../config/database");
 const { convertStock } = require("../../helpers/functions/helperFunction");
 const { Op, literal } = require("sequelize");
 const { getProductDetail } = require("../../helpers/functions/commonFucntions");
+const { fixDecimals } = require("../../helpers/functions/helperFunction");
 
 const MODULE = "Stock General";
 // Create General Stock with Transactions (Insert Only)
@@ -26,14 +27,12 @@ exports.create = async (req, res) => {
     company_id: "Company",
   };
 
-  // Step 2: Now req.body is available
   const errors = await validateRequest(req.body, requiredFields);
   if (errors.length) return res.error("VALIDATION_ERROR", { errors });
 
   const { branch_id, stock_general_date, remark, stock_general_transaction } =
     req.body;
 
-  // Validate transaction array
   if (
     !Array.isArray(stock_general_transaction) ||
     stock_general_transaction.length === 0
@@ -49,10 +48,6 @@ exports.create = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    // Generate general stock number
-    // const general_stock_no = await loadCommonNo(STOCK_GENERAL_SERIES);
-
-    // Insert StockGeneral record
     const generalStockInfo = {
       remark,
       user_id,
@@ -67,7 +62,6 @@ exports.create = async (req, res) => {
     );
     const stock_general_id = insertedStock.id;
 
-    // Insert each transaction
     for (const trn of stock_general_transaction) {
       const {
         product_id,
@@ -86,19 +80,18 @@ exports.create = async (req, res) => {
       } = trn;
 
       const productDetail = await getProductDetail(product_id, transaction);
-      // const productDetail = [(batch_wise_stock_manage = 0)];
 
       const trnData = {
         product_id,
         product_unit,
         product_base_unit,
         product_convert_unit,
-        product_qty,
-        product_base_qty,
-        product_conv_qty,
+        product_qty: fixDecimals(product_qty),
+        product_base_qty: fixDecimals(product_base_qty),
+        product_conv_qty: fixDecimals(product_conv_qty),
         stock_flag,
-        product_amount,
-        product_convert_amount,
+        product_amount: fixDecimals(product_amount, 2),
+        product_convert_amount: fixDecimals(product_convert_amount, 2),
         stock_general_id,
         sales_order_id,
         for_user_id,
@@ -114,13 +107,12 @@ exports.create = async (req, res) => {
       );
       const generalStockTrnId = insertTrn.id;
 
-      // Insert related batch records
       for (const selStock of stock_transaction || []) {
-        const { stock_id, total_base_stock, godown_id, batch_no } = selStock;
+        const { stock_id, godown_id, batch_no } = selStock;
+        const total_base_stock = fixDecimals(selStock.total_base_stock);
 
         if (stock_flag == 2) {
           if (stock_id === 0) {
-            // Pull stock from available StockTransaction entries
             const stockTrnList = await commonQuery.findAllRecords(
               StockTransaction,
               {
@@ -130,7 +122,7 @@ exports.create = async (req, res) => {
                   { product_id },
                   { godown_id },
                   literal(
-                    "CAST(product_base_qty AS DECIMAL(10,2)) > CAST(used_base_qty AS DECIMAL(10,2))"
+                    "CAST(product_base_qty AS DECIMAL(15,5)) > CAST(used_base_qty AS DECIMAL(15,5))"
                   ),
                 ],
               },
@@ -141,7 +133,6 @@ exports.create = async (req, res) => {
               transaction
             );
 
-            // Calculate total available stock before proceeding
             let totalAvailableStock = 0;
 
             for (const stockTrn of stockTrnList) {
@@ -149,16 +140,17 @@ exports.create = async (req, res) => {
 
               if (stockTrn.product_convert_unit === product_unit) {
                 pendingStock =
-                  stockTrn.product_convert_qty - stockTrn.used_convert_qty;
+                  fixDecimals(stockTrn.product_convert_qty) - fixDecimals(stockTrn.used_convert_qty);
               } else {
                 pendingStock =
-                  stockTrn.product_base_qty - stockTrn.used_base_qty;
+                  fixDecimals(stockTrn.product_base_qty) - fixDecimals(stockTrn.used_base_qty);
               }
 
-              totalAvailableStock += pendingStock;
+              totalAvailableStock += fixDecimals(pendingStock);
             }
 
-            // ❌ Insufficient stock → Rollback and return error
+            totalAvailableStock = fixDecimals(totalAvailableStock);
+
             if (totalAvailableStock < total_base_stock) {
               await transaction.rollback();
               return res.error("VALIDATION_ERROR", {
@@ -168,7 +160,6 @@ exports.create = async (req, res) => {
               });
             }
 
-            // ✅ Sufficient stock → Proceed with reservation
             let remainingQty = total_base_stock;
             const itemUnit = product_unit;
 
@@ -177,30 +168,30 @@ exports.create = async (req, res) => {
 
               if (stockTrn.product_convert_unit === itemUnit) {
                 availableStock =
-                  stockTrn.product_convert_qty - stockTrn.used_convert_qty;
+                  fixDecimals(stockTrn.product_convert_qty) - fixDecimals(stockTrn.used_convert_qty);
               } else {
                 availableStock =
-                  stockTrn.product_base_qty - stockTrn.used_base_qty;
+                  fixDecimals(stockTrn.product_base_qty) - fixDecimals(stockTrn.used_base_qty);
               }
 
               if (remainingQty <= 0) break;
 
+              availableStock = fixDecimals(availableStock);
+
               const deductQty = Math.min(availableStock, remainingQty);
-              remainingQty -= deductQty;
+              remainingQty -= fixDecimals(deductQty);
 
               let base_stock = 0;
               let con_stock = 0;
 
               if (itemUnit === productDetail.purchase_unit) {
-                // Convert from convert to base
                 const type = "base_unit";
-                con_stock = deductQty;
-                base_stock = await convertStock(con_stock, product_id, type);
+                con_stock = fixDecimals(deductQty);
+                base_stock = fixDecimals(await convertStock(con_stock, product_id, type));
               } else {
-                // Already in base unit
                 const type = "conv_unit";
-                base_stock = deductQty;
-                con_stock = await convertStock(base_stock, product_id, type);
+                base_stock = fixDecimals(deductQty);
+                con_stock = fixDecimals(await convertStock(base_stock, product_id, type));
               }
 
               await itemReserveStockEntry(
@@ -220,18 +211,17 @@ exports.create = async (req, res) => {
               );
             }
           } else {
-            // stock_id != 0
             let base_stock = 0;
             let con_stock = 0;
 
             if (product_unit === productDetail.purchase_unit) {
               const type = "base_unit";
-              con_stock = total_base_stock;
-              base_stock = await convertStock(con_stock, product_id, type);
+              con_stock = fixDecimals(total_base_stock);
+              base_stock = fixDecimals(await convertStock(con_stock, product_id, type));
             } else {
               const type = "conv_unit";
-              base_stock = total_base_stock;
-              con_stock = await convertStock(base_stock, product_id, type);
+              base_stock = fixDecimals(total_base_stock);
+              con_stock = fixDecimals(await convertStock(base_stock, product_id, type));
             }
 
             const stockTrn = await commonQuery.findOneById(StockTransaction, selStock.stock_id, transaction);
@@ -254,12 +244,7 @@ exports.create = async (req, res) => {
             }
           }
         } else {
-          // stock_flag != 2 → Add new batch
           let currentBatchNo = batch_no;
-
-          // if (productDetail.batch_wise_stock_manage == 1) {
-          //   currentBatchNo = await getBatchNo(product_id);
-          // }
 
           const batchData = {
             stock_general_trn_id: generalStockTrnId,
@@ -268,7 +253,7 @@ exports.create = async (req, res) => {
                 ? currentBatchNo
                 : null,
             godown_id,
-            product_qty: total_base_stock,
+            product_qty: fixDecimals(total_base_stock),
             product_unit: product_unit,
             user_id,
             company_id,
@@ -276,15 +261,10 @@ exports.create = async (req, res) => {
           };
 
           await commonQuery.createRecord(BatchStockIn, batchData, transaction);
-
-          // if (productDetail.batch_wise_stock_manage == 1) {
-          //   await updateBatchNo(product_id);
-          // }
         }
       }
     }
 
-    // await updateCommonNo(STOCK_GENERAL_SERIES);
     await transaction.commit();
     return res.success("STOCK_GENERAL_CREATED", "STOCK", { stock_general_id });
   } catch (err) {
@@ -417,12 +397,12 @@ exports.update = async (req, res) => {
         product_unit,
         product_base_unit,
         product_convert_unit,
-        product_qty,
-        product_base_qty,
-        product_conv_qty,
+        product_qty: fixDecimals(product_qty),
+        product_base_qty: fixDecimals(product_base_qty),
+        product_conv_qty: fixDecimals(product_conv_qty),
         stock_flag,
-        product_amount,
-        product_convert_amount,
+        product_amount: fixDecimals(product_amount, 2),
+        product_convert_amount: fixDecimals(product_convert_amount, 2),
         stock_general_id,
         sales_order_id,
         for_user_id,
@@ -441,6 +421,7 @@ exports.update = async (req, res) => {
 
       for (const selStock of stock_transaction || []) {
         const { stock_id, total_base_stock, godown_id, batch_no } = selStock;
+        const fixedTotalBaseStock = fixDecimals(total_base_stock);
 
         if (stock_flag == 2) {
           if (stock_id === 0) {
@@ -453,7 +434,7 @@ exports.update = async (req, res) => {
                   { product_id },
                   { godown_id },
                   literal(
-                    "CAST(product_base_qty AS DECIMAL(10,2)) > CAST(used_base_qty AS DECIMAL(10,2))"
+                    "CAST(product_base_qty AS DECIMAL(15,5)) > CAST(used_base_qty AS DECIMAL(15,5))"
                   ),
                 ],
               },
@@ -462,7 +443,7 @@ exports.update = async (req, res) => {
               transaction
             );
 
-            // 🔍 Calculate total available stock
+            // Calculate total available stock
             let totalAvailableStock = 0;
 
             for (const stockTrn of stockTrnList) {
@@ -470,77 +451,75 @@ exports.update = async (req, res) => {
 
               if (stockTrn.product_convert_unit === product_unit) {
                 pendingStock =
-                  stockTrn.product_convert_qty - stockTrn.used_convert_qty;
+                  fixDecimals(stockTrn.product_convert_qty) - fixDecimals(stockTrn.used_convert_qty);
               } else {
                 pendingStock =
-                  stockTrn.product_base_qty - stockTrn.used_base_qty;
+                  fixDecimals(stockTrn.product_base_qty) - fixDecimals(stockTrn.used_base_qty);
               }
 
-              totalAvailableStock += pendingStock;
+              totalAvailableStock += fixDecimals(pendingStock);
             }
 
-            // ❌ If insufficient, rollback and exit
-            if (totalAvailableStock < total_base_stock) {
+            totalAvailableStock = fixDecimals(totalAvailableStock);
+
+            // If insufficient, rollback and exit
+            if (totalAvailableStock < fixedTotalBaseStock) {
               await transaction.rollback();
               return res.error("VALIDATION_ERROR", {
                 errors: [
-                  `Insufficient stock for product ID ${product_id} in godown ID ${godown_id}. Required: ${total_base_stock}, Available: ${totalAvailableStock}`,
+                  `Insufficient stock for product ID ${product_id} in godown ID ${godown_id}. Required: ${fixedTotalBaseStock}, Available: ${totalAvailableStock}`,
                 ],
               });
             }
 
-            let itemQty = total_base_stock;
+            let remainingQty = fixedTotalBaseStock;
             const itemUnit = product_unit;
 
             for (const stockTrn of stockTrnList) {
-              let pendingStock = 0;
+              let availableStock = 0;
               if (stockTrn.product_convert_unit === itemUnit) {
-                pendingStock =
-                  stockTrn.product_convert_qty - stockTrn.used_convert_qty;
+                availableStock =
+                  fixDecimals(stockTrn.product_convert_qty) - fixDecimals(stockTrn.used_convert_qty);
               } else {
-                pendingStock =
-                  stockTrn.product_base_qty - stockTrn.used_base_qty;
+                availableStock =
+                  fixDecimals(stockTrn.product_base_qty) - fixDecimals(stockTrn.used_base_qty);
               }
 
-              if (itemQty > 0) {
-                let rqty = 0;
-                if (pendingStock >= itemQty) {
-                  rqty = itemQty;
-                  itemQty = 0;
-                } else {
-                  rqty = pendingStock;
-                  itemQty -= pendingStock;
-                }
+              if (remainingQty <= 0) break;
 
-                let base_stock = 0;
-                let con_stock = 0;
+              availableStock = fixDecimals(availableStock);
 
-                if (itemUnit === productDetail.purchase_unit) {
-                  const type = "base_unit";
-                  con_stock = rqty;
-                  base_stock = await convertStock(con_stock, product_id, type);
-                } else {
-                  const type = "conv_unit";
-                  base_stock = rqty;
-                  con_stock = await convertStock(base_stock, product_id, type);
-                }
+              const deductQty = Math.min(availableStock, remainingQty);
+              remainingQty -= fixDecimals(deductQty);
 
-                await itemReserveStockEntry(
-                  transaction,
-                  product_id,
-                  productDetail.production_unit,
-                  productDetail.purchase_unit,
-                  base_stock,
-                  con_stock,
-                  "Stock General",
-                  generalStockTrnId,
-                  stockTrn.id,
-                  godown_id,
-                  branch_id,
-                  user_id,
-                  company_id
-                );
+              let base_stock = 0;
+              let con_stock = 0;
+
+              if (itemUnit === productDetail.purchase_unit) {
+                const type = "base_unit";
+                con_stock = fixDecimals(deductQty);
+                base_stock = fixDecimals(await convertStock(con_stock, product_id, type));
+              } else {
+                const type = "conv_unit";
+                base_stock = fixDecimals(deductQty);
+                con_stock = fixDecimals(await convertStock(base_stock, product_id, type));
               }
+
+              await itemReserveStockEntry(
+                transaction,
+                product_id,
+                productDetail.production_unit,
+                productDetail.purchase_unit,
+                base_stock,
+                con_stock,
+                "Stock General",
+                generalStockTrnId,
+                stockTrn.id,
+                godown_id,
+                branch_id,
+                user_id,
+                company_id
+              );
             }
           } else {
             let base_stock = 0;
@@ -548,36 +527,35 @@ exports.update = async (req, res) => {
 
             if (product_unit === productDetail.purchase_unit) {
               const type = "base_unit";
-              con_stock = total_base_stock;
-              base_stock = await convertStock(con_stock, product_id, type);
+              con_stock = fixDecimals(fixedTotalBaseStock);
+              base_stock = fixDecimals(await convertStock(con_stock, product_id, type));
             } else {
               const type = "conv_unit";
-              base_stock = total_base_stock;
-              con_stock = await convertStock(base_stock, product_id, type);
+              base_stock = fixDecimals(fixedTotalBaseStock);
+              con_stock = fixDecimals(await convertStock(base_stock, product_id, type));
             }
 
-            await itemReserveStockEntry(
-              transaction,
-              product_id,
-              productDetail.production_unit,
-              productDetail.purchase_unit,
-              base_stock,
-              con_stock,
-              "Stock General",
-              generalStockTrnId,
-              stock_id,
-              godown_id,
-              branch_id,
-              user_id,
-              company_id
-            );
+            const stockTrn = await commonQuery.findOneById(StockTransaction, stock_id, transaction);
+            if (stockTrn && stockTrn.id) {
+              await itemReserveStockEntry(
+                transaction,
+                product_id,
+                productDetail.production_unit,
+                productDetail.purchase_unit,
+                base_stock,
+                con_stock,
+                "Stock General",
+                generalStockTrnId,
+                stockTrn.id,
+                godown_id,
+                branch_id,
+                user_id,
+                company_id
+              );
+            }
           }
         } else {
           let currentBatchNo = batch_no;
-
-          // if (productDetail.batch_wise_stock_manage == 1) {
-          //   currentBatchNo = await getBatchNo(product_id);
-          // }
 
           const batchData = {
             stock_general_trn_id: generalStockTrnId,
@@ -586,7 +564,7 @@ exports.update = async (req, res) => {
                 ? currentBatchNo
                 : null,
             godown_id,
-            product_qty: total_base_stock,
+            product_qty: fixedTotalBaseStock,
             product_unit: product_unit,
             user_id,
             company_id,
@@ -594,10 +572,6 @@ exports.update = async (req, res) => {
           };
 
           await commonQuery.createRecord(BatchStockIn, batchData, transaction);
-
-          // if (productDetail.batch_wise_stock_manage == 1) {
-          //   await updateBatchNo(product_id);
-          // }
         }
       }
     }
@@ -712,9 +686,9 @@ exports.getStock = async (req, res) => {
       const pid = stock.product_id;
 
       const availableBaseQty =
-        parseFloat(stock.product_base_qty) - parseFloat(stock.used_base_qty);
+        fixDecimals(stock.product_base_qty) - fixDecimals(stock.used_base_qty);
       const availableConvertQty =
-        parseFloat(stock.product_convert_qty) - parseFloat(stock.used_convert_qty);
+        fixDecimals(stock.product_convert_qty) - fixDecimals(stock.used_convert_qty);
 
       if (!productMap[pid]) {
         const productDetail = await getProductDetail(pid);
@@ -730,14 +704,14 @@ exports.getStock = async (req, res) => {
         };
       }
 
-      productMap[pid].available_base_qty += availableBaseQty;
-      productMap[pid].available_convert_qty += availableConvertQty;
+      productMap[pid].available_base_qty = fixDecimals(productMap[pid].available_base_qty + availableBaseQty);
+      productMap[pid].available_convert_qty = fixDecimals(productMap[pid].available_convert_qty + availableConvertQty);
 
       productMap[pid].batches.push({
         stock_trn_id: stock.id,
         batch_no: stock.batch_no,
-        available_base_qty: availableBaseQty,
-        available_convert_qty: availableConvertQty,
+        available_base_qty: fixDecimals(availableBaseQty),
+        available_convert_qty: fixDecimals(availableConvertQty),
         godown_id: stock.godown_id,
       });
     }
@@ -814,8 +788,8 @@ exports.deleteDeductStock = async (req, res) => {
           StockTransaction,
           { id: stockTrn.id },
           {
-            used_base_qty: Number(stockTrn.used_base_qty || 0) - Number(reserve.product_base_qty || 0),
-            used_convert_qty: Number(stockTrn.used_convert_qty || 0) - Number(reserve.product_convert_qty || 0),
+            used_base_qty: fixDecimals(Number(stockTrn.used_base_qty || 0) - Number(reserve.product_base_qty || 0)),
+            used_convert_qty: fixDecimals(Number(stockTrn.used_convert_qty || 0) - Number(reserve.product_convert_qty || 0)),
           },
           transaction,
           true
@@ -892,11 +866,32 @@ exports.deleteAddStock = async (req, res) => {
 
     const trnIds = generalTrns.map((t) => t.id);
 
+    // Soft delete BatchStockIn
     await commonQuery.softDeleteById(
       BatchStockIn,
       { stock_general_trn_id: { [Op.in]: trnIds } },
       transaction
     );
+
+    // Soft delete StockTransaction and deduct used qty if needed
+    const stockTransactions = await commonQuery.findAllRecords(
+      StockTransaction,
+      { ref_id: { [Op.in]: trnIds }, ref_name: "Stock General" },
+      transaction
+    );
+
+    for (const stockTrn of stockTransactions) {
+      await commonQuery.updateRecordById(
+        StockTransaction,
+        { id: stockTrn.id },
+        {
+          used_base_qty: fixDecimals(Number(stockTrn.used_base_qty || 0) - Number(stockTrn.product_base_qty || 0)),
+          used_convert_qty: fixDecimals(Number(stockTrn.used_convert_qty || 0) - Number(stockTrn.product_convert_qty || 0)),
+        },
+        transaction,
+        true
+      );
+    }
 
     await commonQuery.softDeleteById(
       StockTransaction,

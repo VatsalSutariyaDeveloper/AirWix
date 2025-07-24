@@ -3,8 +3,8 @@ module.exports = (sequelize, DataTypes) => {
     sales_order_transaction_id: { type: DataTypes.INTEGER },
     delivery_date: { type: DataTypes.DATEONLY },
     product_unit: { type: DataTypes.STRING(50) },
-    product_qty: { type: DataTypes.DECIMAL(10, 2) },
-    used_qty: { type: DataTypes.DECIMAL(10, 2) },
+    product_qty: { type: DataTypes.DECIMAL(15,5) },
+    used_qty: { type: DataTypes.DECIMAL(15,5) },
     invoice_status: { type: DataTypes.TINYINT }, // 0/1
     invoice_id: { type: DataTypes.INTEGER },
     status: {

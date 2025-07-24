@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const HSNMasterTransaction = sequelize.define('HSNMasterTransaction', {
     hsn_id: { type: DataTypes.INTEGER, allowNull: false },
     item_tax_template_id: { type: DataTypes.INTEGER, allowNull: false },
-    tax_rate: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    tax_rate: { type: DataTypes.DECIMAL(15,5), allowNull: false },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,

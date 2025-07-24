@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     bom_active_status: { type: DataTypes.TINYINT, defaultValue: 1, comment: "0 = Inactive, 1 = Active" },
     bom_version_date: { type: DataTypes.DATEONLY },
     unit: { type: DataTypes.STRING(50) },
-    unit_quantity: { type: DataTypes.DECIMAL(12, 3) },
+    unit_quantity: { type: DataTypes.DECIMAL(15,5) },
     conversion_unit: { type: DataTypes.STRING(50) },
-    conversion_quantity: { type: DataTypes.DECIMAL(12, 3) },
+    conversion_quantity: { type: DataTypes.DECIMAL(15,5) },
     drawing_id: { type: DataTypes.INTEGER },
     revision_id: { type: DataTypes.INTEGER },
     status: {

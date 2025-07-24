@@ -10,3 +10,10 @@ exports.getProductDetail = async (product_id, transaction = null) => {
 
   return product;
 };
+
+exports.fixDecimals = async (value, digits = 5) => {
+  if (isNaN(value)) return "0." + "0".repeat(digits);
+  // Use Math.ceil to always round up
+  const factor = Math.pow(10, digits);
+  return (Math.ceil(Number(value) * factor) / factor).toFixed(digits);
+}

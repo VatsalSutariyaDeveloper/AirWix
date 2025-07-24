@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     quotation_comparision_approval: { type: DataTypes.TINYINT, allowNull: true },
     delivery_priode: { type: DataTypes.STRING(100), allowNull: true },
     ex_delivery: { type: DataTypes.STRING(100), allowNull: true },
-    discount: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
-    amount: { type: DataTypes.DECIMAL(12, 2), allowNull: true },
+    discount: { type: DataTypes.DECIMAL(15,5), allowNull: true },
+    amount: { type: DataTypes.DECIMAL(15,5), allowNull: true },
     payment_terms: { type: DataTypes.STRING(255), allowNull: true },
     status: {
       type: DataTypes.TINYINT,

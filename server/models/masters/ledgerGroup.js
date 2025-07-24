@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const LedgerGroup = sequelize.define("LedgerGroup", {
     parent_group_id: { type: DataTypes.INTEGER, allowNull: true },
     group_name: { type: DataTypes.STRING(100), allowNull: false },
-    opening_balance: { type: DataTypes.DECIMAL(15, 2), allowNull: true },
+    opening_balance: { type: DataTypes.DECIMAL(115,5), allowNull: true },
     start_series: { type: DataTypes.STRING(100), allowNull: true },
     series_formet: { type: DataTypes.STRING(50), allowNull: true },
     formet_value: { type: DataTypes.STRING(50), allowNull: true },

@@ -11,6 +11,8 @@ const ASSIGN_BOM_MODULE = "Assign Bom";
 
 // Get All Sales Orders with JOIN to SalesOrder
 exports.getAll = async (req, res) => {
+  const transaction = await sequelize.transaction();
+
   try {
     const result = await SalesOrderTransaction.findAll({
       where: {
@@ -28,8 +30,10 @@ exports.getAll = async (req, res) => {
       ],
     });
 
+    await transaction.commit();
     return res.success("FETCH", MODULE, result);
   } catch (err) {
+    await transaction.rollback();
     return res.error("SERVER_ERROR", { error: err.message });
   }
 };
@@ -39,7 +43,7 @@ exports.assignStandardBom = async (req, res) => {
   const { sales_order_transaction_id, product_id, bom_id, branch_id } =
     req.body;
   const { company_id, user_id } = req.body;
-
+  const transaction = await sequelize.transaction();
   const requiredFields = {
     user_id: "User",
     company_id: "Company",
@@ -79,7 +83,8 @@ exports.assignStandardBom = async (req, res) => {
         // Insert into pro_so_asssign_bom_version
         const insertBom = await commonQuery.createRecord(
           SalesOrderProductAssignBomVersion,
-          assignData
+          assignData,
+          transaction
         );
 
         // If inserted successfully, update bom_status in sales_ordertrn
@@ -90,14 +95,16 @@ exports.assignStandardBom = async (req, res) => {
             {
               bom_status: 1,
               bom_id: currentBomId,
-            }
+            },
+            transaction
           );
         }
       }
     }
-
+    await transaction.commit();
     return res.success("CREATE", ASSIGN_BOM_MODULE, {});
   } catch (error) {
+    await transaction.rollback();
     console.error("BOM Assignment Error:", error);
     return res.error("SERVER_ERROR", { error: error.message });
   }
@@ -128,6 +135,8 @@ exports.assignBom = async (req, res) => {
   const errors = await validateRequest(req.body, requiredFields);
   if (errors.length) return res.error("VALIDATION_ERROR", { errors });
 
+  const transaction = await sequelize.transaction();
+
   try {
     const currentBomId = bom_id;
 
@@ -145,7 +154,8 @@ exports.assignBom = async (req, res) => {
       // Insert into pro_so_asssign_bom_version
       const insertBom = await commonQuery.createRecord(
         SalesOrderProductAssignBomVersion,
-        assignData
+        assignData,
+        transaction
       );
 
       // If inserted successfully, update bom_status in sales_ordertrn
@@ -156,13 +166,15 @@ exports.assignBom = async (req, res) => {
           {
             bom_status: 1,
             bom_id: currentBomId,
-          }
+          },
+          transaction
         );
       }
     }
-
+    await transaction.commit();
     return res.success("CREATE", ASSIGN_BOM_MODULE, {});
   } catch (error) {
+    await transaction.rollback();
     console.error("BOM Assignment Error:", error);
     return res.error("SERVER_ERROR", { error: error.message });
   }
