@@ -1,4 +1,4 @@
-const { BranchMaster } = require("../../models/masterModels");
+const { BranchMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

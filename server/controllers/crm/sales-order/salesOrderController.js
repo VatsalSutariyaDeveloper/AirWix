@@ -1,4 +1,4 @@
-const { SalesOrder, SalesOrderTransaction,SalesOrderDeliveryDate } = require("../../../models/crmModels");
+const { SalesOrder, SalesOrderTransaction,SalesOrderDeliveryDate } = require("../../../models");
 const sequelize = require("../../../config/database");
 const commonQuery = require("../../../helpers/commonQuery");
 const { createBillSundries,createTaxTransactions, updateSeries  } = require("../../../helpers/functions/transaction_functions");

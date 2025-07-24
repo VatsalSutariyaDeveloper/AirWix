@@ -1,5 +1,5 @@
 // Controller for Inquiry Note Master
-const { InquiryNote } = require("../../../models/crmModels");
+const { InquiryNote } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

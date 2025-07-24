@@ -1,4 +1,4 @@
-const { SalesOrderTermsTransaction } = require("../../../models/crmModels");
+const { SalesOrderTermsTransaction } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

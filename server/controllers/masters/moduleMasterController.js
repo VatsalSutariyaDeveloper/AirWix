@@ -1,4 +1,4 @@
-const { ModuleMaster } = require("../../models/masterModels");
+const { ModuleMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

@@ -1,4 +1,4 @@
-const { PurchaseQuotation } = require("../../models/purchaseModels");
+const { PurchaseQuotation } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

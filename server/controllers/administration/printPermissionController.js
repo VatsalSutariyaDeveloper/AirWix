@@ -1,4 +1,4 @@
-const { PrintPermission } = require("../../models/administrationModels");
+const { PrintPermission } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

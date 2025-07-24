@@ -1,4 +1,4 @@
-const { Appointment } = require("../../../models/crmModels");
+const { Appointment } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

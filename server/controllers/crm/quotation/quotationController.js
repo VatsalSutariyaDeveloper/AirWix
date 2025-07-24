@@ -1,4 +1,4 @@
-const { Quotation } = require("../../../models/crmModels");
+const { Quotation } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

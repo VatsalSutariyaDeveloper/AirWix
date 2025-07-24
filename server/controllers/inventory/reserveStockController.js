@@ -2,7 +2,7 @@ const {
   ReserveStock,
   StockGeneralTransaction,
   StockTransaction,
-} = require("../../models/inventoryModels");
+} = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 const sequelize = require("../../config/database");

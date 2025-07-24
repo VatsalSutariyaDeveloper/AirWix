@@ -1,4 +1,4 @@
-const { SeriesTypeMaster } = require("../../models/masterModels");
+const { SeriesTypeMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

@@ -1,4 +1,4 @@
-const { PaymentTermsMaster } = require("../../models/masterModels");
+const { PaymentTermsMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

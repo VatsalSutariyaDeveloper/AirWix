@@ -1,6 +1,6 @@
 const dayjs = require('dayjs');
 const commonQuery = require('../commonQuery');
-const { ItemMaster } = require('../../models/masterModels');
+const { ItemMaster } = require('../../models');
 const { getProductDetail } = require('./commonFucntions');
 
 exports.getExpDateByProduct = async (product_id, mfgDate) => {

@@ -1,4 +1,4 @@
-const { BOMProductProcess } = require("../../../models/productionModels");
+const { BOMProductProcess } = require("../../../models");
 const { validateRequest, commonQuery } = require("../../../helpers/index");
 
 const MODULE = "BOM Product Process";

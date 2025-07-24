@@ -1,7 +1,7 @@
-const { BillSundryTransaction,TaxTransaction } = require("../../models/transactionModels");
+const { BillSundryTransaction,TaxTransaction } = require("../../models");
 const validateRequest = require("../validateRequest");
 const commonQuery = require("../commonQuery");
-const { SeriesTypeMaster } = require("../../models/masterModels");
+const { SeriesTypeMaster } = require("../../models");
 
 // Create Bill Sundries
 exports.createBillSundries = async ({ sundries, module_transaction_id, transaction }) => {

@@ -1,4 +1,4 @@
-const { ProductBomVersion } = require("../../../models/productionModels");
+const { ProductBomVersion } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

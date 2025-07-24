@@ -4,8 +4,8 @@ const {
   BatchStockIn,
   StockTransaction,
   BatchData,
-} = require("../../models/inventoryModels");
-const { ItemMaster } = require("../../models/masterModels");
+} = require("../../models");
+const { ItemMaster } = require("../../models");
 const commonQuery = require("../commonQuery");
 const moment = require("moment");
 const { convertStock, getExpDateByProduct } = require("./helperFunction");

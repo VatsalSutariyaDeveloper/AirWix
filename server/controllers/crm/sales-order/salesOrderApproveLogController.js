@@ -1,4 +1,4 @@
-const { SalesOrderApproveLog } = require("../../../models/crmModels");
+const { SalesOrderApproveLog } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

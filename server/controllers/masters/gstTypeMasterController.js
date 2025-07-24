@@ -1,4 +1,4 @@
-const { GstTypeMaster } = require("../../models/masterModels");
+const { GstTypeMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

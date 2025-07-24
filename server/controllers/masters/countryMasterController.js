@@ -1,4 +1,4 @@
-const { CountryMaster } = require("../../models/masterModels");
+const { CountryMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

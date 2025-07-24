@@ -1,4 +1,4 @@
-const { MenuMasterAccessRoute } = require("../../models/administrationModels");
+const { MenuMasterAccessRoute } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

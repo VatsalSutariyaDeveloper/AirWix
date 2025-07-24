@@ -1,4 +1,4 @@
-const { StockTransaction } = require("../../models/inventoryModels"); // Use models/index.js
+const { StockTransaction } = require("../../models"); // Use models/index.js
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 const sequelize = require("../../config/database");

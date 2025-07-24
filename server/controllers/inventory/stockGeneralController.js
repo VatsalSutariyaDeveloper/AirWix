@@ -4,7 +4,7 @@ const {
   BatchStockIn,
   StockGeneralApprovalLog,
   StockTransaction,
-} = require("../../models/inventoryModels"); // Use models/index.js
+} = require("../../models"); // Use models/index.js
 const validateRequest = require("../../helpers/validateRequest");
 const {
   enterProductionStockEffect,

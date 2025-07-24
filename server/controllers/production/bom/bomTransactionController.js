@@ -1,4 +1,4 @@
-const { BOMTransaction, BOM, ProductBomVersion } = require("../../../models/productionModels");
+const { BOMTransaction, BOM, ProductBomVersion } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 const sequelize = require("../../../config/database");
@@ -95,7 +95,7 @@ exports.create = async (req, res) => {
 };
 
 
-// const { BOMTransaction, BOM, ProductBomVersion } = require("../../../models/productionModels");
+// const { BOMTransaction, BOM, ProductBomVersion } = require("../../../models");
 // const validateRequest = require("../../../helpers/validateRequest");
 // const commonQuery = require("../../../helpers/commonQuery");
 

@@ -1,4 +1,4 @@
-const { QcParameterMaster } = require("../../models/masterModels");
+const { QcParameterMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

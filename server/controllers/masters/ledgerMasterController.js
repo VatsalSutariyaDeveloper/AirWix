@@ -1,4 +1,4 @@
-const { LedgerMaster } = require("../../models/masterModels");
+const { LedgerMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

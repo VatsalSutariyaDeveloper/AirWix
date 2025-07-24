@@ -1,4 +1,4 @@
-const { ProcessListMaster } = require("../../models/masterModels");
+const { ProcessListMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

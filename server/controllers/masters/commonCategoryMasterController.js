@@ -1,4 +1,4 @@
-const { CommonCategoryMaster } = require("../../models/masterModels");
+const { CommonCategoryMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

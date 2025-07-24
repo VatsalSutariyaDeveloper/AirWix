@@ -1,4 +1,4 @@
-const { HSNMasterTransaction } = require("../../../models/masterModels");
+const { HSNMasterTransaction } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

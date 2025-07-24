@@ -1,4 +1,4 @@
-const { ProductUnitMaster } = require("../../../models/masterModels");
+const { ProductUnitMaster } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

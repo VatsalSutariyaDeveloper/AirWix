@@ -1,4 +1,4 @@
-const { PrintMaster } = require("../../models/administrationModels");
+const { PrintMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

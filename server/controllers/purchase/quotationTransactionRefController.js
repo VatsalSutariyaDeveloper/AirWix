@@ -1,4 +1,4 @@
-const { QuotationTransactionRef } = require("../../models/purchaseModels");
+const { QuotationTransactionRef } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 
