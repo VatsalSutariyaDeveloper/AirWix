@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../../../controllers/masters/item/itemMasterController");
-const { bufferImage } = require("../../../helpers/fileUpload");
+const controller = require("../../controllers/masters/productTypeMasterController");
 
-router.post("/", bufferImage("item_image"), controller.create);
+router.post("/", controller.create);
 router.get("/", controller.getAll);
 router.get("/:id", controller.getById);
 router.put("/:id", controller.update);

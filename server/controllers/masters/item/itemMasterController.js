@@ -1,49 +1,42 @@
 const { ItemMaster } = require("../../../models/masterModels");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
-const { uploadFile } = require("../../../helpers/fileUpload");
+const { uploadImage } = require("../../../helpers/fileUpload");
 
 const MODULE = "Item Name";
 
 exports.create = async (req, res) => {
-  const upload = uploadFile("image", "uploads/items/").single("item_image");
 
-  // Step 1: Run multer first to get `req.body` and `req.file`
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.error("VALIDATION_ERROR", { error: err.message });
-    }
+  const requiredFields = {
+    item_code: "Item Code",
+    item_name: "Item Name",
+    user_id: "User",
+    branch_id: "Branch",
+    company_id: "Company"
+  };
 
-    const requiredFields = {
-      item_code: "Item Code",
-      item_name: "Item Name",
-      user_id: "User",
-      branch_id: "Branch",
-      company_id: "Company"
-    };
+  if (req.file) {
+    req.body.item_image = req.file.filename;
+  }
 
-    if (req.file) {
-      req.body.item_image = req.file.filename;
-    }
-
-    // Step 2: Now req.body is available
-    const errors = await validateRequest(req.body, requiredFields, {
-      uniqueCheck: {
-        model: ItemMaster,
-        fields: ["item_code", "item_name"]
-      },
-      imageFields: ["item_image"]
-    });
-
-    if (errors.length) return res.error("VALIDATION_ERROR", { errors });
-
-    try {
-      const result = await commonQuery.createRecord(ItemMaster, req.body);
-      return res.success("CREATE", MODULE, result);
-    } catch (err) {
-      return res.error("SERVER_ERROR", { error: err.message });
-    }
+  // Step 2: Now req.body is available
+  const errors = await validateRequest(req.body, requiredFields, {
+    uniqueCheck: {
+      model: ItemMaster,
+      fields: ["item_code", "item_name"]
+    },
+    imageFields: ["item_image"]
   });
+
+  if (errors.length) return res.error("VALIDATION_ERROR", { errors });
+
+  try {
+    const result = await commonQuery.createRecord(ItemMaster, req.body);
+    uploadImage(req, "items", "item_image");
+    return res.success("CREATE", MODULE, result);
+  } catch (err) {
+    return res.error("SERVER_ERROR", { error: err.message });
+  }
 };
 
 
@@ -70,12 +63,6 @@ exports.getById = async (req, res) => {
 
 // UPDATE
 exports.update = async (req, res) => {
-  const upload = uploadFile("image", "uploads/items/").single("item_image");
-
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.error("VALIDATION_ERROR", { error: err.message });
-    }
 
     const requiredFields = {
       item_code: "Item Code",
@@ -107,7 +94,6 @@ exports.update = async (req, res) => {
     } catch (err) {
       return res.error("SERVER_ERROR", { error: err.message });
     }
-  });
 };
 
 // DELETE (Soft)

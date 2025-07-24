@@ -42,10 +42,12 @@ const TranspotationMaster = require("./masters/transpotationMaster")(sequelize, 
 const GodownMaster = require("./masters/godownMaster")(sequelize, DataTypes);
 const ProcessTypeMaster = require("./masters/processTypeMaster")(sequelize, DataTypes);
 const ProcessListMaster = require("./masters/processListMaster")(sequelize, DataTypes);
-const ProductSpecificationMaster = require("./masters/productSpecificationMaster")(sequelize, DataTypes);
-const ProductSpecificationValueMaster = require("./masters/productSpecificationValueMaster")(sequelize, DataTypes);
 const QcParameterMaster = require("./masters/qcParameterMaster")(sequelize, DataTypes);
 const GstTypeMaster = require("./masters/gstTypeMaster")(sequelize, DataTypes);
+const ProductSpecificationMaster = require("./masters/productSpecificationMaster")(sequelize, DataTypes);
+const ProductSpecificationValueMaster = require("./masters/productSpecificationValueMaster")(sequelize, DataTypes);
+const ProductTypeMaster = require("./masters/productTypeMaster")(sequelize, DataTypes);
+const ProductSeriesMaster = require("./masters/productSeriesMaster")(sequelize, DataTypes);
 
 module.exports = {
   ProductCategory,
@@ -83,8 +85,10 @@ module.exports = {
   GodownMaster,
   ProcessTypeMaster,
   ProcessListMaster,
-  ProductSpecificationMaster,
-  ProductSpecificationValueMaster,
   QcParameterMaster,
   GstTypeMaster,
+  ProductSpecificationMaster,
+  ProductSpecificationValueMaster,
+  ProductTypeMaster,
+  ProductSeriesMaster,
 };

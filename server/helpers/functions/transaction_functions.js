@@ -57,19 +57,20 @@ exports.createTaxTransactions = async ({ taxes, module_transaction_id, transacti
   }
 };
 
-exports.updateSeries = async ({ module_id, series_id }, transaction) => {
+exports.updateSeries = async (seriesInput, transaction) => {
+  const series_id = typeof seriesInput === 'object' ? seriesInput.series_id : seriesInput;
+
   const series = await SeriesTypeMaster.findOne({
     where: {
-      id: series_id,
-      module_id
+      id: series_id
     },
     transaction
   });
 
   if (!series) throw new Error("Series not found");
 
-  const current = parseInt(series.start_series || "0", 10);
-  const newStart = (current + 1).toString().padStart(series.start_series.length, "0");
+  const current = parseInt(series.start_series || 0, 10);
+  const newStart = (current + 1).toString().padStart(series.start_series.length, 0);
 
   await SeriesTypeMaster.update(
     { start_series: newStart },

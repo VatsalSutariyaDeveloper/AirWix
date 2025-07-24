@@ -21,17 +21,21 @@ module.exports = {
 
   // 2. Update a record by ID
   updateRecordById: async (model, where, data) => {
-    if (!where || !model || !data)
-      throw new Error("Invalid parameters passed to updateRecordById.");
+  if (!where || !model || !data)
+    throw new Error("Invalid parameters passed to updateRecordById.");
 
-    const record = await model.findOne({
-      where: { ...where, status: { [Op.ne]: 2 } },
-    });
-    if (!record) return null;
+  const condition = typeof where === "object" ? where : { id: where };
 
-    await record.update(data);
-    return record;
-  },
+  const record = await model.findOne({
+    where: { ...condition, status: { [Op.ne]: 2 } },
+  });
+
+  if (!record) return null;
+
+  await record.update(data);
+  return record;
+},
+
 
   // 3. Soft delete by ID (status = 2)
   softDeleteById: async (model, where) => {
@@ -85,12 +89,20 @@ module.exports = {
     return await model.findAll(options);
   },
 
-  // 5. Find one by ID (optionally exclude deleted)
-  findOneById: async (model, id, includeDeleted = false) => {
-    const condition = { id };
-    if (!includeDeleted) condition.status = { [Op.ne]: 2 };
-    return await model.findOne({ where: condition });
-  },
+// 5. Find one by ID (optionally exclude deleted), with optional transaction
+findOneById: async (model, id, includeDeleted = false, transaction = null) => {
+  const condition = { id };
+  if (!includeDeleted) condition.status = { [Op.ne]: 2 };
+
+  const options = {
+    where: condition,
+  };
+
+  if (transaction) options.transaction = transaction;
+
+  return await model.findOne(options);
+},
+
 
   // 6. Hard Delete by ID (Delete Data)
   hardDeleteById: async (model, id) => {

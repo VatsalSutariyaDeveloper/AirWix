@@ -1,11 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-  const PurchaseQuotationRef = sequelize.define("PurchaseQuotationRef", {
-    ref_quotation_no: { type: DataTypes.STRING(100), allowNull: false },
-    ref_quotation_date: { type: DataTypes.DATEONLY, allowNull: false },
-    vendor_id: { type: DataTypes.INTEGER, allowNull: false },
-    comparision_status: { type: DataTypes.TINYINT, defaultValue: 0 },
+  const QuotationComparisonRequest = sequelize.define("QuotationComparisonRequest", {
+    req_quotation_no: { type: DataTypes.STRING(100), allowNull: false },
+    req_quotation_date: { type: DataTypes.DATEONLY, allowNull: false },
+    vendor_id: { type: DataTypes.TEXT, allowNull: false },
+    comparison: { type: DataTypes.TINYINT, defaultValue: 0 },
     comparision_user: { type: DataTypes.INTEGER, allowNull: true },
-    ref_quotation_status: { type: DataTypes.TINYINT, defaultValue: 0 },
     approval_status: { type: DataTypes.TINYINT, defaultValue: 0 },
     approval_user: { type: DataTypes.INTEGER, allowNull: true },
     status: {
@@ -17,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     branch_id: { type: DataTypes.INTEGER, allowNull: false },
     company_id: { type: DataTypes.INTEGER, allowNull: false }
   }, {
-    tableName: "purchase_quotation_ref",
+    tableName: "quotation_comparison_request",
     timestamps: true,
     underscored: true
   });
 
-  return PurchaseQuotationRef;
+  return QuotationComparisonRequest;
 };

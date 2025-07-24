@@ -1,10 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const QuotationTransactionRef = sequelize.define("QuotationTransactionRef", {
-    approve_indent_id: { type: DataTypes.INTEGER, allowNull: false },
-    supplier_details_id: { type: DataTypes.INTEGER, allowNull: false },
+  const QuotationComparisonTrnReq = sequelize.define("QuotationComparisonTrnReq", {
+    qc_request_id: { type: DataTypes.INTEGER, allowNull: true },
+    approve_indent_id: { type: DataTypes.INTEGER },
+    supplier_details_id: { type: DataTypes.INTEGER },
+    vendor_id: { type: DataTypes.INTEGER, allowNull: true },
     product_id: { type: DataTypes.INTEGER, allowNull: false },
-    product_qty: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     unit_id: { type: DataTypes.INTEGER, allowNull: false },
+    product_qty: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     product_base_qty: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
     product_base_unit_id: { type: DataTypes.INTEGER, allowNull: true },
     product_convert_qty: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
@@ -19,9 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     quotation_comp_user: { type: DataTypes.INTEGER, allowNull: true },
     quotation_comp_approval: { type: DataTypes.TINYINT, allowNull: true },
     quotation_comp_approval_user: { type: DataTypes.INTEGER, allowNull: true },
-    vendor_id: { type: DataTypes.INTEGER, allowNull: true },
-    parent_request_id: { type: DataTypes.INTEGER, allowNull: true },
-    quotation_no: { type: DataTypes.STRING(100), allowNull: true },
     status: {
       type: DataTypes.TINYINT,
       defaultValue: 0,
@@ -31,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     branch_id: { type: DataTypes.INTEGER, allowNull: false },
     company_id: { type: DataTypes.INTEGER, allowNull: false }
   }, {
-    tableName: "quotation_transaction_ref",
+    tableName: "quotation_comparison_transaction_req",
     timestamps: true,
     underscored: true
   });
 
-  return QuotationTransactionRef;
+  return QuotationComparisonTrnReq;
 };

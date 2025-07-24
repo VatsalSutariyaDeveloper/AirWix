@@ -4,15 +4,15 @@ const router = express.Router();
 // All purchase routes
 const indentApprovalRoutes = require("./purchase/indentApprovalRoutes");
 const purchaseQuotationRoutes = require("./purchase/quotationRoutes");
-const purchaseQuotationRefRoutes = require("./purchase/quotationRefRoutes");
+const requestRoutes = require("./purchase/quotation-comparison/requestRoutes");
 const quotationTransactionRefRoutes = require("./purchase/quotationTransactionRefRoutes");
-const supplierQuotationDetailsRoutes = require("./purchase/supplierQuotationDetailsRoutes");
+const supplierQuotationDetailsRoutes = require("./purchase/quotation-comparison/supplierDetailsRoutes");
 
 router.use("/indent-approval", indentApprovalRoutes);
 router.use("/quotation", purchaseQuotationRoutes);
-router.use("/quotation-ref", purchaseQuotationRefRoutes);
+router.use("/quotation-comparison/request", requestRoutes);
 router.use("/quotation-transaction-ref", quotationTransactionRefRoutes);
-router.use("/supplier-quotation-details", supplierQuotationDetailsRoutes);
+router.use("/quotation-comparison/supplier-details", supplierQuotationDetailsRoutes);
 
 
 

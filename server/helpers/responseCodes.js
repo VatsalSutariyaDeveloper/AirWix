@@ -26,6 +26,28 @@ module.exports = {
     message: "Unique constraint violation",
   },
 
+  // 🔴 File Upload Errors
+  FILE_TYPE_NOT_ALLOWED: {
+    code: "FILE_TYPE_NOT_ALLOWED",
+    status: 400,
+    message: "Only JPG, JPEG, PNG, and WEBP image files are allowed."
+  },
+  FILE_TOO_LARGE: {
+    code: "FILE_TOO_LARGE",
+    status: 400,
+    message: "Image file too large. Maximum allowed size is 2MB."
+  },
+  FILE_REQUIRED: {
+    code: "FILE_REQUIRED",
+    status: 400,
+    message: "File is required."
+  },
+  FILE_UPLOAD_FAILED: {
+    code: "FILE_UPLOAD_FAILED",
+    status: 500,
+    message: "File could not be saved due to a server error."
+  },
+  
   // ✅ Success Responses
   SUCCESS: {
     FETCH: (name = "Record") => ({

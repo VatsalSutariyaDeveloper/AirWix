@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const SupplierQuotationDetails = sequelize.define("SupplierQuotationDetails", {
-    quotation_ref_id: { type: DataTypes.INTEGER, allowNull: false },
+  const SupplierDetails = sequelize.define("SupplierDetails", {
+    quotation_req_id: { type: DataTypes.INTEGER, allowNull: false },
     vendor_id: { type: DataTypes.INTEGER, allowNull: false },
     quotation_no: { type: DataTypes.STRING(100), allowNull: false },
     quotation_date: { type: DataTypes.DATEONLY, allowNull: false },
@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     branch_id: { type: DataTypes.INTEGER, allowNull: false },
     company_id: { type: DataTypes.INTEGER, allowNull: false }
   }, {
-    tableName: "supplier_quotation_details",
+    tableName: "quotation_comparison_supplier_details",
     timestamps: true,
     underscored: true
   });
 
-  return SupplierQuotationDetails;
+  return SupplierDetails;
 };

@@ -94,15 +94,20 @@ const express = require("express");
 const router = express.Router();
 
 // All item master related routes
-// const productCategoryRoutes = require("./masters/item/productCategoryRoutes");
-// const itemTaxTemplateRoutes = require("./masters/item/itemTaxTemplateRoutes");
-// const itemTaxTemplateTransaction = require("./masters/item/itemTaxTemplateTransaction");
-// const hsnMasterRoutes = require("./masters/item/hsnMasterRoutes");
-// const hsnMasterTransaction = require("./masters/item/hsnMasterTransaction");
-// const itemMasterFieldValue = require("./masters/item/itemMasterFieldValue");
-// const itemMasterFieldName = require("./masters/item/itemMasterFieldName");
-// const productUnitMasterRoutes = require("./masters/item/productUnitMasterRoutes");
-// const itemMaster = require("./masters/item/itemMaster");
+const productCategoryRoutes = require("./masters/item/productCategoryRoutes");
+const itemTaxTemplateRoutes = require("./masters/item/itemTaxTemplateRoutes");
+const itemTaxTemplateTransaction = require("./masters/item/itemTaxTemplateTransaction");
+const hsnMasterRoutes = require("./masters/item/hsnMasterRoutes");
+const hsnMasterTransaction = require("./masters/item/hsnMasterTransaction");
+const itemMasterFieldValue = require("./masters/item/itemMasterFieldValue");
+const itemMasterFieldName = require("./masters/item/itemMasterFieldName");
+const itemMaster = require("./masters/item/itemMaster");
+const productUnitMasterRoutes = require("./masters/item/productUnitMasterRoutes");
+const productProcessRoutes = require("./masters/item/productProcessRoutes");
+const productSpecificationMasterRoutes = require("./masters/productSpecificationMasterRoutes");
+const productSpecificationValueMasterRoutes = require("./masters/productSpecificationValueMasterRoutes");
+const productTypeMasterRoutes = require("./masters/productTypeMasterRoutes");
+const productSeriesMasterRoutes = require("./masters/productSeriesMasterRoutes");
 
 //All Masters Routes
 const branchMasterRoutes = require("./masters/branchMasterRoutes");
@@ -130,24 +135,26 @@ const transpotationMasterRoutes = require("./masters/transpotationMasterRoutes")
 const godownMasterRoutes = require("./masters/godownMasterRoutes");
 const processTypeMasterRoutes = require("./masters/processTypeMasterRoutes");
 const processListMasterRoutes = require("./masters/processListMasterRoutes");
-const productSpecificationMasterRoutes = require("./masters/productSpecificationMasterRoutes");
-const productSpecificationValueMasterRoutes = require("./masters/productSpecificationValueMasterRoutes");
 const qcParameterMasterRoutes = require("./masters/qcParameterMasterRoutes");
 const gstTypeMasterRoutes = require("./masters/gstTypeMasterRoutes");
-const productProcessRoutes = require("./masters/item/productProcessRoutes");
+
 
 
 // Mount product routes
-// router.use("/category", productCategoryRoutes);
-// router.use("/tax-template", itemTaxTemplateRoutes);
-// router.use("/tax-template-transaction", itemTaxTemplateTransaction);
-// router.use("/hsn", hsnMasterRoutes);
-// router.use("/hsn-transaction", hsnMasterTransaction);
-// router.use("/item-master-field-value", itemMasterFieldValue);
-// router.use("/item-master-field-name", itemMasterFieldName);
-// router.use("/product-unit", productUnitMasterRoutes);
-// router.use("/item", itemMaster);
-
+router.use("/category", productCategoryRoutes);
+router.use("/tax-template", itemTaxTemplateRoutes);
+router.use("/tax-template-transaction", itemTaxTemplateTransaction);
+router.use("/hsn", hsnMasterRoutes);
+router.use("/hsn-transaction", hsnMasterTransaction);
+router.use("/item-master-field-value", itemMasterFieldValue);
+router.use("/item-master-field-name", itemMasterFieldName);
+router.use("/item", itemMaster);
+router.use("/product-unit", productUnitMasterRoutes);
+router.use("/product-process", productProcessRoutes);
+router.use("/product-specification", productSpecificationMasterRoutes);
+router.use("/product-specification-value", productSpecificationValueMasterRoutes);
+router.use("/product-type", productTypeMasterRoutes);
+router.use("/product-series", productSeriesMasterRoutes);
 
 //All Masters Routes
 router.use("/branch", branchMasterRoutes);
@@ -175,9 +182,6 @@ router.use("/transpotation", transpotationMasterRoutes);
 router.use("/godown", godownMasterRoutes);
 router.use("/process-type", processTypeMasterRoutes);
 router.use("/process-list", processListMasterRoutes);
-router.use("/product-process", productProcessRoutes);
-router.use("/product-specification", productSpecificationMasterRoutes);
-router.use("/product-specification-value", productSpecificationValueMasterRoutes);
 router.use("/qc-parameter", qcParameterMasterRoutes);
 router.use("/gst-type", gstTypeMasterRoutes);
 
