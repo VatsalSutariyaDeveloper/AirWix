@@ -1,0 +1,71 @@
+module.exports = (sequelize, DataTypes) => {
+  const BatchData = sequelize.define(
+    "BatchData",
+    {
+      batch_no: { type: DataTypes.STRING(100) },
+      batch_qty: { type: DataTypes.DECIMAL(10, 2) },
+      grn_id: { type: DataTypes.INTEGER },
+      grn_trn_id: { type: DataTypes.INTEGER },
+      order_no: { type: DataTypes.STRING(200) },
+      mfg_date: { type: DataTypes.STRING(200) },
+      exp_date: { type: DataTypes.STRING(200) },
+      qc_status: { type: DataTypes.TINYINT },
+      accept_qty: { type: DataTypes.DECIMAL(10, 2) },
+      reject_qty: { type: DataTypes.DECIMAL(10, 2) },
+      reprocess_qty: { type: DataTypes.DECIMAL(10, 2) },
+      product_id: { type: DataTypes.INTEGER },
+      batch_unit: { type: DataTypes.INTEGER },
+      base_qty: { type: DataTypes.DECIMAL(10, 2) },
+      base_unit: { type: DataTypes.INTEGER },
+      conv_qty: { type: DataTypes.DECIMAL(10, 2) },
+      conv_unit: { type: DataTypes.INTEGER },
+      qc_qty: { type: DataTypes.DECIMAL(10, 2) },
+      stock_approval_status: {
+        type: DataTypes.TINYINT,
+        defaultValue: 0,
+        comment: "0 = no, 1 = yes",
+      },
+      reprocess_qc: { type: DataTypes.DECIMAL(10, 2) },
+      process_id: { type: DataTypes.INTEGER },
+      p_id: { type: DataTypes.INTEGER },
+      reprocess_qc_id: { type: DataTypes.INTEGER },
+      customer_id: { type: DataTypes.INTEGER },
+      is_scrap: {
+        type: DataTypes.TINYINT,
+        defaultValue: 0,
+        comment: "0 = no, 1 = yes",
+      },
+      to_godown_id: { type: DataTypes.INTEGER },
+      qc_id: { type: DataTypes.INTEGER },
+      auto_store_relese: {
+        type: DataTypes.TINYINT,
+        defaultValue: 0,
+        comment: "1 = yes, 0 = no",
+      },
+      grn_godown: { type: DataTypes.INTEGER },
+      extra_stock: { type: DataTypes.DECIMAL(10, 2) },
+      grn_accept_qty: { type: DataTypes.DECIMAL(10, 2) },
+      grn_reject_qty: { type: DataTypes.DECIMAL(10, 2) },
+      grn_reprocess_qty: { type: DataTypes.DECIMAL(10, 2) },
+      supplier_tc_no: { type: DataTypes.STRING(200) },
+      qc_sample_qty: { type: DataTypes.DECIMAL(10, 2) },
+      purchaseordertrn_id: { type: DataTypes.INTEGER },
+      heat_number: { type: DataTypes.STRING(200) },
+      status: {
+        type: DataTypes.TINYINT,
+        defaultValue: 0,
+        comment: "0: Active, 1: Inactive, 2: Deleted",
+      },
+      user_id: { type: DataTypes.INTEGER },
+      branch_id: { type: DataTypes.INTEGER },
+      company_id: { type: DataTypes.INTEGER },
+    },
+    {
+      tableName: "batch_stock_in",
+      timestamps: true,
+      underscored: true,
+    }
+  );
+
+  return BatchData;
+};
