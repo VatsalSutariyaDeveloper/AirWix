@@ -19,6 +19,7 @@
     "form-data": "^4.0.4",
     "multer": "^2.0.1",
     "mysql2": "^3.14.1",
+    "pdf-parse": "^1.1.1",
     "sequelize": "^6.37.7"
   }
 }
