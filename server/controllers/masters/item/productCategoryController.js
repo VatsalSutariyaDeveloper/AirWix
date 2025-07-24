@@ -1,5 +1,5 @@
 const validateRequest = require("../../../helpers/validateRequest");
-const { ProductCategory } = require("../../../models/masterModels");
+const { ProductCategory } = require("../../../models");
 const commonQuery = require("../../../helpers/commonQuery");
 
 const MODULE = "Product Category";

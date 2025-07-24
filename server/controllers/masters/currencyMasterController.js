@@ -1,4 +1,4 @@
-const { CurrencyMaster } = require("../../models/masterModels");
+const { CurrencyMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

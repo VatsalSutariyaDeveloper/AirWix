@@ -1,4 +1,4 @@
-const { Inquiry } = require("../../../models/crmModels");
+const { Inquiry } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

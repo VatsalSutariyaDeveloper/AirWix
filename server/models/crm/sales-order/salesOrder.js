@@ -73,6 +73,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "sales_order_id",
       as: "transactions",
     });
+
+    // Ledger association
+    SalesOrder.belongsTo(models.LedgerMaster, {
+      foreignKey: "customer_id",
+      as: "ledger",
+    });
   };
 
   return SalesOrder;

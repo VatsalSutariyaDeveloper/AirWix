@@ -1,4 +1,4 @@
-const { Indent, IndentTransaction } = require("../../models/purchaseModels");
+const { Indent, IndentTransaction } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 const sequelize = require("../../config/database");

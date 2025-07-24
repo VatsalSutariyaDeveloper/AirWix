@@ -1,4 +1,4 @@
-const { QuotationComparisonRequest, QuotationComparisonTrnReq } = require("../../../models/purchaseModels");
+const { QuotationComparisonRequest, QuotationComparisonTrnReq } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 const sequelize = require("../../../config/database");

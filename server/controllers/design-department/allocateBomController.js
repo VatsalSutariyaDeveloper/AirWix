@@ -1,7 +1,7 @@
-const { SalesOrderTransaction, SalesOrder } = require("../../models/crmModels");
+const { SalesOrderTransaction, SalesOrder } = require("../../models");
 const {
   SalesOrderProductAssignBomVersion,
-} = require("../../models/designDepartmentModels");
+} = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 const sequelize = require("../../config/database");

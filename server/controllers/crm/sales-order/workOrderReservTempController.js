@@ -1,4 +1,4 @@
-const { WorkOrderReservTemp } = require("../../../models/crmModels");
+const { WorkOrderReservTemp } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

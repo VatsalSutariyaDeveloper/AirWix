@@ -1,4 +1,4 @@
-const { UserTypeMaster } = require("../../models/masterModels");
+const { UserTypeMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

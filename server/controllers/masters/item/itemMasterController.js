@@ -1,4 +1,4 @@
-const { ItemMaster } = require("../../../models/masterModels");
+const { ItemMaster } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 const { uploadImage } = require("../../../helpers/fileUpload");

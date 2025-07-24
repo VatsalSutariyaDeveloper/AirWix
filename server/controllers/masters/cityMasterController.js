@@ -1,4 +1,4 @@
-const { CityMaster } = require("../../models/masterModels");
+const { CityMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

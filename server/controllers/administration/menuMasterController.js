@@ -1,4 +1,4 @@
-const { MenuMaster } = require("../../models/administrationModels");
+const { MenuMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

@@ -1,4 +1,4 @@
-const { GodownMaster } = require("../../models/masterModels");
+const { GodownMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

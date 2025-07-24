@@ -1,4 +1,4 @@
-const { ProductProcess } = require("../../../models/masterModels");
+const { ProductProcess } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

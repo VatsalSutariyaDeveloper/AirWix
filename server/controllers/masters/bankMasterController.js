@@ -1,4 +1,4 @@
-const { BankMaster } = require("../../models/masterModels");
+const { BankMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

@@ -1,4 +1,4 @@
-const { TemplateAccessPermission } = require("../../models/administrationModels");
+const { TemplateAccessPermission } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

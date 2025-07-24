@@ -1,4 +1,4 @@
-const { SalesOrderDeliveryDate } = require("../../../models/crmModels");
+const { SalesOrderDeliveryDate } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

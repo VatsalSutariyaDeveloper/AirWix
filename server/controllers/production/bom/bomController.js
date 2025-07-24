@@ -1,4 +1,4 @@
-const { BOM } = require("../../../models/productionModels");
+const { BOM } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

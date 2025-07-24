@@ -1,4 +1,4 @@
-const { ZoneMaster } = require("../../models/masterModels");
+const { ZoneMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

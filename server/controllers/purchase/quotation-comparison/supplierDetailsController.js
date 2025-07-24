@@ -1,4 +1,4 @@
-const { QCSupplierDetails } = require("../../../models/purchaseModels");
+const { QCSupplierDetails } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 const axios = require('axios');

@@ -1,4 +1,4 @@
-const { ItemMasterFieldValue } = require("../../../models/masterModels");
+const { ItemMasterFieldValue } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

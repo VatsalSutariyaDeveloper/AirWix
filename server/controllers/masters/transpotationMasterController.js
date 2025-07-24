@@ -1,4 +1,4 @@
-const { TranspotationMaster } = require("../../models/masterModels");
+const { TranspotationMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

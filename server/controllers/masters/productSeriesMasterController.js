@@ -1,4 +1,4 @@
-const { ProductSeriesMaster } = require("../../models/masterModels");
+const { ProductSeriesMaster } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

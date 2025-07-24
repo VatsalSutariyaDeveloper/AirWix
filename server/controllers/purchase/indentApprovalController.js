@@ -1,4 +1,4 @@
-const { IndentApproval } = require("../../models/purchaseModels");
+const { IndentApproval } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

@@ -1,4 +1,4 @@
-const { InquiryTypeMaster } = require("../../../models/crmModels");
+const { InquiryTypeMaster } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

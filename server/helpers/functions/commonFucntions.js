@@ -1,7 +1,7 @@
-const { BillSundryTransaction,TaxTransaction } = require("../../models/transactionModels");
+const { BillSundryTransaction,TaxTransaction } = require("../../models");
 const validateRequest = require("../validateRequest");
 const commonQuery = require("../commonQuery");
-const { ItemMaster } = require('../../models/masterModels');
+const { ItemMaster } = require('../../models');
 
 exports.getProductDetail = async (product_id, transaction = null) => {
   if (!product_id) return null;

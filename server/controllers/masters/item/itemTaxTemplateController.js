@@ -1,4 +1,4 @@
-const { ItemTaxTemplate } = require("../../../models/masterModels");
+const { ItemTaxTemplate } = require("../../../models");
 const validateRequest = require("../../../helpers/validateRequest");
 const commonQuery = require("../../../helpers/commonQuery");
 

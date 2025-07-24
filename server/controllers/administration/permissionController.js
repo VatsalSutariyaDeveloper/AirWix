@@ -1,4 +1,4 @@
-const { Permission } = require("../../models/administrationModels");
+const { Permission } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

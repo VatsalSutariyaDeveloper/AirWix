@@ -1,4 +1,4 @@
-const { LedgerGroup } = require("../../models/masterModels");
+const { LedgerGroup } = require("../../models");
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 

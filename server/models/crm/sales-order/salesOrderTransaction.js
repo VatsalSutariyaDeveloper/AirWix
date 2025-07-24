@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       delivery_type: { type: DataTypes.TINYINT },
       delivery_date: { type: DataTypes.DATE },
       bom_status: { type: DataTypes.TINYINT },
+      with_out_stock_invoice: { type: DataTypes.TINYINT },
       invoice_status: { type: DataTypes.TINYINT },
       invoice_id: { type: DataTypes.INTEGER },
       remaning_invoice_qty: { type: DataTypes.DECIMAL(10, 2) },
@@ -58,7 +59,6 @@ module.exports = (sequelize, DataTypes) => {
       total_amount: { type: DataTypes.DECIMAL(12, 2) },
       total_convert_amount: { type: DataTypes.DECIMAL(12, 2) },
       priority: { type: DataTypes.STRING(10) },
-      sales_order_transaction_status: { type: DataTypes.TINYINT },
       user_id: { type: DataTypes.INTEGER, allowNull: false },
       branch_id: { type: DataTypes.INTEGER, allowNull: false },
       company_id: { type: DataTypes.INTEGER, allowNull: false },
@@ -76,9 +76,28 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   SalesOrderTransaction.associate = (models) => {
+    // SalesOrder association
     SalesOrderTransaction.belongsTo(models.SalesOrder, {
       foreignKey: "sales_order_id",
       as: "salesOrder",
+    });
+
+    // Product (ItemMaster) association
+    SalesOrderTransaction.belongsTo(models.ItemMaster, {
+      foreignKey: "product_id",
+      as: "product",
+    });
+
+    // Branch association
+    SalesOrderTransaction.belongsTo(models.BranchMaster, {
+      foreignKey: "branch_id",
+      as: "branch",
+    });
+
+    // ProductionTrn association (example: hasMany to SalesOrderProductionTransaction)
+    SalesOrderTransaction.hasMany(models.SalesOrderProductionTransaction, {
+      foreignKey: "sales_order_transaction_id",
+      as: "productionTrn",
     });
   };
 
