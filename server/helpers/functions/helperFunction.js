@@ -35,7 +35,7 @@ exports.convertStock = async (stock, productId, type) => {
 
     let result;
     if (product_base_unit !== product_conv_unit) {
-      if (type === 'base_unit') {
+      if (type === 1 /* Base Unit */) {
         result = (stock / product_conv_qty) * product_base_qty;
       } else {
         result = (stock / product_base_qty) * product_conv_qty;

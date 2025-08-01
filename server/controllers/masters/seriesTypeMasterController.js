@@ -69,7 +69,7 @@ exports.update = async (req, res) => {
   if (errors.length) return res.error("VALIDATION_ERROR", { errors });
 
   try {
-    const updated = await commonQuery.updateRecordById(SeriesTypeMaster, req.params.id, req.body);
+    const updated = await commonQuery.updateRecordById(SeriesTypeMaster, { id: req.params.id }, req.body);
     if (!updated || updated.status === 2) return res.error("NOT_FOUND");
     return res.success("UPDATE", MODULE, updated);
   } catch (err) {

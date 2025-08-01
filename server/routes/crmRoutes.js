@@ -11,6 +11,7 @@ const appointmentRoutes = require("./crm/inquiry/appointmentRoutes");
 const followUpRoutes = require("./crm/inquiry/followUpRoutes");
 
 const salesOrderRoutes = require("./crm/sales-order/salesOrderRoutes");
+const salesOrderStockAllocateRoutes = require("./crm/sales-order/salesOrderStockAllocateRoutes");
 const salesOrderTransactionRoutes = require("./crm/sales-order/salesOrderTransactionRoutes");
 const salesOrderTermsTransactionRoutes = require("./crm/sales-order/salesOrderTermsTransactionRoutes");
 const salesOrderAttachmentRoutes = require("./crm/sales-order/salesOrderAttachmentRoutes");
@@ -37,6 +38,7 @@ router.use("/inquiry/appointment", appointmentRoutes);
 router.use("/inquiry/followup", followUpRoutes);
 
 router.use("/sales-order/transaction", salesOrderTransactionRoutes);
+router.use("/sales-order/stock-allocate", salesOrderStockAllocateRoutes);
 router.use("/sales-order/terms-transaction", salesOrderTermsTransactionRoutes);
 router.use("/sales-order/attachment", salesOrderAttachmentRoutes);
 router.use("/sales-order/delivery-date", salesOrderDeliveryDateRoutes);

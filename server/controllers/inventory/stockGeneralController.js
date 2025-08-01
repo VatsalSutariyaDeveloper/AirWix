@@ -15,8 +15,7 @@ const commonQuery = require("../../helpers/commonQuery");
 const sequelize = require("../../config/database");
 const { convertStock } = require("../../helpers/functions/helperFunction");
 const { Op, literal } = require("sequelize");
-const { getProductDetail } = require("../../helpers/functions/commonFucntions");
-const { fixDecimals } = require("../../helpers/functions/helperFunction");
+const { getProductDetail, fixDecimals } = require("../../helpers/functions/commonFucntions");
 
 const MODULE = "Stock General";
 // Create General Stock with Transactions (Insert Only)
@@ -63,6 +62,7 @@ exports.create = async (req, res) => {
     const stock_general_id = insertedStock.id;
 
     for (const trn of stock_general_transaction) {
+      console.log("Processing transaction:", trn);
       const {
         product_id,
         product_unit,
@@ -564,7 +564,7 @@ exports.update = async (req, res) => {
                 ? currentBatchNo
                 : null,
             godown_id,
-            product_qty: fixedTotalBaseStock,
+            product_qty: fixDecimals(fixedTotalBaseStock),
             product_unit: product_unit,
             user_id,
             company_id,
@@ -670,7 +670,7 @@ exports.getStock = async (req, res) => {
         ...filters,
         [Op.and]: [
           literal(
-            "CAST(product_base_qty AS DECIMAL(10,2)) > CAST(used_base_qty AS DECIMAL(10,2))"
+            "CAST(product_base_qty AS DECIMAL(15,5)) > CAST(used_base_qty AS DECIMAL(15,5))"
           ),
         ],
       },

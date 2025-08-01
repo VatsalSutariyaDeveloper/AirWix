@@ -45,6 +45,10 @@ const StockGeneralTransaction = require("./inventory/stockGeneralTransaction")(s
 const BatchStockIn = require("./inventory/batchStockIn")(sequelize, DataTypes);
 const StockGeneralApprovalLog = require("./inventory/stockGeneralApprovalLog")(sequelize, DataTypes);
 
+// Inventory models
+const Invoice = require("./finance/invoice")(sequelize, DataTypes);
+const InvoiceTransaction = require("./finance/invoiceTransaction")(sequelize, DataTypes);
+
 // Masters models
 const ProductCategory = require("./masters/item/productCategory")(sequelize, DataTypes);
 const ItemTaxTemplate = require("./masters/item/itemTaxTemplate")(sequelize, DataTypes);
@@ -155,6 +159,10 @@ const db = {
   StockGeneralTransaction,
   BatchStockIn,
   StockGeneralApprovalLog,
+
+  // Inventory
+  Invoice,
+  InvoiceTransaction,
 
   // Masters
   ProductCategory,

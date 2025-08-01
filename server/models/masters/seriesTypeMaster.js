@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     financial_year_id: { type: DataTypes.INTEGER, allowNull: false },
     series_type_name: { type: DataTypes.STRING(100), allowNull: false, unique: true },
     start_series: { type: DataTypes.INTEGER, allowNull: false },
-    series_format: { type: DataTypes.STRING(50), allowNull: false },
+    series_format: { type: DataTypes.INTEGER, allowNull: false },
     format_value: { type: DataTypes.STRING(50), allowNull: false },
     end_format_value: { type: DataTypes.STRING(50), allowNull: false },
     status: {

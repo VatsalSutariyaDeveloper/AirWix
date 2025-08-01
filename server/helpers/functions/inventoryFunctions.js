@@ -9,8 +9,9 @@ const { ItemMaster } = require("../../models");
 const commonQuery = require("../commonQuery");
 const moment = require("moment");
 const { convertStock, getExpDateByProduct } = require("./helperFunction");
-const { getProductDetail } = require("./commonFucntions");
-const { fixDecimals } = require("./helperFunction");
+const { getProductDetail, fixDecimals } = require("./commonFucntions");
+const { Op, literal } = require("sequelize");
+const { sequelize } = require("../../models");
 // const { session } = require("../middleware/authMiddleware");
 
 exports.addStock = async ({
@@ -381,4 +382,107 @@ exports.itemReserveStockEntry = async (
   } catch (err) {
     throw err;
   }
+};
+
+exports.getCurrentStock = async (productId, unitId, unit_type, godownId) => {
+  const filters = {
+    stock_flag: 1,
+    status: 0,
+    [Op.and]: [
+      literal(
+        "CAST(product_base_qty AS DECIMAL(15,5)) > CAST(used_base_qty AS DECIMAL(15,5))"
+      ),
+    ],
+  };
+
+  if (productId) filters.product_id = productId;
+  if (unitId && unit_type==1 /* Base Unit */) filters.product_base_unit = unitId;
+  if (unitId && unit_type==2 /* Convert Unit */) filters.product_convert_unit = unitId;
+  if (godownId) filters.godown_id = godownId;
+
+  const stockList = await commonQuery.findAllRecords(
+    StockTransaction,
+    filters
+  );
+
+  let availableBaseQty = 0;
+
+  for (const stock of stockList) {
+    availableBaseQty += fixDecimals(stock.product_base_qty) - fixDecimals(stock.used_base_qty);
+  }
+
+  return fixDecimals(availableBaseQty);
+};
+
+exports.getReserveStock = async (productId, unitId, unit_type, godownId, transaction = null) => {
+
+  const filters = {
+    status: 0,
+  };
+
+  if (productId) filters.product_id = productId;
+  if (unitId && unit_type==1 /* Base Unit */) filters.product_base_unit = unitId;
+  if (unitId && unit_type==2 /* Convert Unit */) filters.product_convert_unit = unitId;
+  if (godownId) filters.godown_id = godownId;
+
+  // Get approved stock
+  const approvedStock = await commonQuery.findAllRecords(
+    ReserveStock,
+    {
+      ...filters,
+      stock_flag: 1,
+    },
+    false,
+    {
+      attributes: [
+        "product_id",
+        [
+          sequelize.fn("SUM", sequelize.col("product_base_qty")),
+          "total_product_base",
+        ],
+        [
+          sequelize.fn("SUM", sequelize.col("product_convert_qty")),
+          "total_product_convert",
+        ],
+      ],
+      group: ["product_id"],
+    },
+    transaction
+  );
+
+  // Get used stock
+  const usedStock = await commonQuery.findAllRecords(
+    ReserveStock,
+    {
+      ...filters,
+      stock_flag: 2,
+    },
+    false,
+    {
+      attributes: [
+        "product_id",
+        [
+          sequelize.fn("SUM", sequelize.col("product_base_qty")),
+          "total_used_base",
+        ],
+        [
+          sequelize.fn("SUM", sequelize.col("product_convert_qty")),
+          "total_used_convert",
+        ],
+      ],
+      group: ["product_id"],
+    },
+    transaction
+  );
+
+  // Calculate available stock
+  const appr = approvedStock[0];
+  const used = usedStock[0];
+
+  const approveBase = fixDecimals(appr?.get("total_product_base") || 0);
+  const approveConvert = fixDecimals(appr?.get("total_product_convert") || 0);
+  const usedBase = fixDecimals(used?.get("total_used_base") || 0);
+  const usedConvert = fixDecimals(used?.get("total_used_convert") || 0);
+
+  return fixDecimals(approveBase + approveConvert - usedBase - usedConvert);
 };

@@ -6,7 +6,7 @@ const {
 const validateRequest = require("../../helpers/validateRequest");
 const commonQuery = require("../../helpers/commonQuery");
 const sequelize = require("../../config/database");
-const { getProductDetail } = require("../../helpers/functions/commonFucntions");
+const { getProductDetail, fixDecimals } = require("../../helpers/functions/commonFucntions");
 const { Op, literal } = require("sequelize");
 
 const MODULE = "Reserve Stock";
@@ -195,7 +195,8 @@ exports.getReserveStock = async (req, res) => {
 
       return {
         product_id: prodId,
-        available_qty: fixDecimals(approveBase + approveConvert - usedBase - usedConvert),
+        reserve_base_qty: fixDecimals(approveBase - usedBase),
+        reserve_convert_qty: fixDecimals(approveConvert - usedConvert),
       };
     });
 
